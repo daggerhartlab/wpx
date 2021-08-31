@@ -1,0 +1,24 @@
+{
+    "name": "daggerhartlab/wpx",
+    "description": "WordPress library",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Jonathan Daggerhart",
+            "email": "jonathan@daggerhart.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php-di/php-di": "^6.3",
+        "bradmkjr/monolog-wordpress": "^2.1"
+    },
+    "autoload": {
+        "classmap": [
+            "Wpx.php"
+        ],
+        "psr-4": {
+            "Wpx\\": "src/"
+        }
+    }
+}
