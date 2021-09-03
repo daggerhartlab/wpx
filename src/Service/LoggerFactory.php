@@ -6,6 +6,7 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use WordPressHandler\WordPressHandler;
+use Wpx\Logger\UserLogger;
 
 /**
  * Class LoggerFactory.
@@ -81,7 +82,7 @@ class LoggerFactory {
 	 * @return \WordPressHandler\WordPressHandler
 	 */
 	public function getDbHandler() {
-		$handler = new WordPressHandler( $this->wpdb, 'logs', [], $this->level );
+		$handler = new WordPressHandler( $this->wpdb, 'logs', ['uid'], $this->level );
 		$handler->conf_table_size_limiter( $this->limit );
 		return $handler;
 	}
@@ -89,6 +90,8 @@ class LoggerFactory {
 	/**
 	 * Get a logger for the given channel name.
 	 *
+	 * @param \WP_User $user
+	 *   User context.
 	 * @param string $name
 	 *   Channel name.
 	 * @param HandlerInterface[] $handlers
@@ -96,8 +99,8 @@ class LoggerFactory {
 	 *
 	 * @return LoggerInterface
 	 */
-	public function channel( string $name, $handlers = [] ) {
-		$logger = new \Monolog\Logger( $name );
+	public function channel( \WP_User $user, string $name, $handlers = [] ) {
+		$logger = new UserLogger( $user, $name );
 		foreach ( $handlers as $handler ) {
 			$logger->pushHandler( $handler );
 		}

@@ -73,6 +73,7 @@ class LoggerTable extends \WP_List_Table {
 			'level' => __( 'Level' ),
 			'message' => __( 'Message' ),
 			'time' => __( 'Time' ),
+			'uid' => __( 'User' ),
 		];
 	}
 
@@ -93,6 +94,7 @@ class LoggerTable extends \WP_List_Table {
 	public function get_sortable_columns() {
 		return [
 			'time' => [ 'time', true ],
+			'uid' => [ 'uid', true ],
 		];
 	}
 
@@ -157,8 +159,13 @@ class LoggerTable extends \WP_List_Table {
 		switch ( $column_name ) {
 			case 'level':
 				return $this->logger::getLevelName( $item[ $column_name ] );
+
 			case 'time':
 				return date( 'c', $item[ $column_name ] );
+
+			case 'uid':
+				$user = get_user_by( 'ID', $item[ $column_name ] );
+				return "<a href='" . get_edit_user_link( $user->ID ) . "'>{$user->user_email}</a>";
 			default:
 				return $item[ $column_name ];
 		}
