@@ -33,7 +33,7 @@ return [
 		return new LoggerFactory( $container->get( 'database' ) );
 	},
 	'logger.channel.default' => function( ContainerInterface $container ) {
-		return $container->get( 'logger_factory' )->channel( 'default' );
+		return $container->get( 'logger.factory' )->channel( 'default' );
 	},
 	'messenger' => function( ContainerInterface $container ) {
 		return new MessengerUser( $container->get( 'current_user' ) );
