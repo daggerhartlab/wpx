@@ -47,13 +47,34 @@ class MessengerUser implements MessengerInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function add( $message, $type ) {
+	public function add( string $message, string $type ) {
 		$this->items[ md5( $message . $type ) ] = [
 			'message' => $message,
 			'type' => $type,
 			'timestamp' => time(),
 		];
 		$this->save();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function addSuccess( string $message ) {
+		$this->add( $message, 'success' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function addUpdated( string $message ) {
+		$this->add( $message, 'updated' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function addError( string $message ) {
+		$this->add( $message, 'error' );
 	}
 
 	/**
