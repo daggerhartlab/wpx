@@ -130,6 +130,16 @@ class EnvironmentDetector {
 	}
 
 	/**
+	 * Whether we're in a lando environment.
+	 *
+	 * @return bool
+	 *   True if host is lando.
+	 */
+	public function isLando() {
+		return $this->host === 'lando';
+	}
+
+	/**
 	 * Set an environment data value.
 	 *
 	 * @param string $name
