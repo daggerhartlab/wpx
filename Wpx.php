@@ -26,7 +26,14 @@ class Wpx {
 		$builder = new ContainerBuilder();
 		$builder->useAutowiring(FALSE);
 		$builder->useAnnotations(FALSE);
-		$builder->addDefinitions(__DIR__ . '/container-config.php');
+		$definitions_files = apply_filters( 'wpx.services/definitions', [
+			__DIR__ . '/wpx.services.php',
+		] );
+
+		foreach ($definitions_files as $file) {
+			$builder->addDefinitions($file);
+		}
+
 		return $builder->build();
 	}
 
