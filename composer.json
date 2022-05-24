@@ -11,8 +11,7 @@
     "minimum-stability": "stable",
     "require": {
         "php-di/php-di": "^6.3",
-        "bradmkjr/monolog-wordpress": "^2.1",
-        "wp-cli/wp-cli": "^2.0"
+        "bradmkjr/monolog-wordpress": "^2.1"
     },
     "autoload": {
         "classmap": [
@@ -21,5 +20,8 @@
         "psr-4": {
             "Wpx\\": "src/"
         }
+    },
+    "require-dev": {
+        "wp-cli/wp-cli": "^2.0"
     }
 }
