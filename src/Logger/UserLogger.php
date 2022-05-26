@@ -3,24 +3,16 @@
 namespace Wpx\Logger;
 
 use DateTimeZone;
+use Monolog\Logger;
 
 /**
  * Logger that adds WP uid context to each log.
  */
-class UserLogger extends \Monolog\Logger {
-
-	/**
-	 * User context.
-	 *
-	 * @var \WP_User
-	 */
-	protected $user;
+class UserLogger extends Logger {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param \WP_User $user
-	 *   User context.
 	 * @param string $name
 	 *   Channel name.
 	 * @param array $handlers
@@ -30,8 +22,7 @@ class UserLogger extends \Monolog\Logger {
 	 * @param \DateTimeZone|null $timezone
 	 *   Timezone.
 	 */
-	public function __construct( \WP_User $user, string $name, array $handlers = [], array $processors = [], ?DateTimeZone $timezone = null ) {
-		$this->user = $user;
+	public function __construct(string $name, array $handlers = [], array $processors = [], ?DateTimeZone $timezone = null ) {
 		parent::__construct( $name, $handlers, $processors, $timezone );
 	}
 
@@ -39,7 +30,7 @@ class UserLogger extends \Monolog\Logger {
 	 * {@inheritDoc}
 	 */
 	public function addRecord( int $level, string $message, array $context = [] ): bool {
-		$context['uid'] = $this->user->ID;
+		$context['uid'] = \did_action('plugins_loaded') ? \get_current_user_id() : 0;
 		return parent::addRecord( $level, $message, $context );
 	}
 

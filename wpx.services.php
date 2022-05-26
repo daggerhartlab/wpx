@@ -22,20 +22,16 @@ use function DI\create;
 // @codingStandardsIgnoreStart
 return [
 	'current_user' => function() {
-		return wp_get_current_user();
+		return \wp_get_current_user();
 	},
 	'database' => function() {
 		global $wpdb;
 		return $wpdb;
 	},
 	'env.detector' => create( EnvironmentDetector::class ),
-	'logger.factory' => function( ContainerInterface $container ) {
-		return new LoggerFactory( $container->get( 'database' ) );
-	},
-	'logger.channel.default' => function( ContainerInterface $container ) {
-		return $container->get( 'logger.factory' )->channel(
-			$container->get('current_user'),
-			'default'
+	'logger_factory' => function( ContainerInterface $container ) {
+		return new LoggerFactory(
+			$container->get( 'database' )
 		);
 	},
 	'messenger' => function( ContainerInterface $container ) {

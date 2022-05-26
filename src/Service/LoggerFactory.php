@@ -2,113 +2,42 @@
 
 namespace Wpx\Service;
 
-use Monolog\Handler\HandlerInterface;
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
-use WordPressHandler\WordPressHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Processor\PsrLogMessageProcessor;
 use Wpx\Logger\UserLogger;
 
 /**
  * Class LoggerFactory.
- *
- * @link https://github.com/bradmkjr/monolog-wordpress
  *
  * @package Wpx\Service
  */
 class LoggerFactory {
 
 	/**
-	 * WP database.
-	 *
 	 * @var \wpdb
 	 */
-	protected $wpdb;
+	protected $database;
 
 	/**
-	 * Logging levels by name.
-	 *
-	 * @var string
+	 * @param \wpdb $database
 	 */
-	protected $levels = [
-		'disabled' => Logger::EMERGENCY,
-		'error' => Logger::ERROR,
-		'debug' => Logger::DEBUG,
-		'info' => Logger::INFO,
-	];
-
-	/**
-	 * Log level name.
-	 *
-	 * @var string
-	 */
-	protected $levelName = 'info';
-
-	/**
-	 * Log level.
-	 *
-	 * @var int
-	 */
-	protected $level = Logger::INFO;
-
-	/**
-	 * Logs retention limit.
-	 *
-	 * @var int
-	 */
-	protected $limit = 25000;
-
-	/**
-	 * LoggerFactory constructor.
-	 *
-	 * @param string|null $level_name
-	 *   Log level name.
-	 * @param int|null $limit
-	 *   Log retention limit.
-	 */
-	public function __construct( \wpdb $wpdb, string $level_name = null, int $limit = null ) {
-		$this->wpdb = $wpdb;
-		if ( $level_name && isset( $this->levels[ $level_name ] ) ) {
-			$this->levelName = $level_name;
-			$this->level = $this->levels[ $level_name ];
-		}
-		if ( $limit ) {
-			$this->limit = $limit;
-		}
+	public function __construct(\wpdb $database) {
+		$this->database = $database;
 	}
 
 	/**
-	 * Get database handler based on plugin settings.
+	 * Create a new logger instance.
 	 *
-	 * @return \WordPressHandler\WordPressHandler
+	 * @param string $channel
+	 *
+	 * @return \Psr\Log\LoggerInterface
 	 */
-	public function getDbHandler() {
-		$handler = new WordPressHandler( $this->wpdb, 'logs', ['uid'], $this->level );
-		$handler->conf_table_size_limiter( $this->limit );
-		return $handler;
-	}
-
-	/**
-	 * Get a logger for the given channel name.
-	 *
-	 * @param \WP_User $user
-	 *   User context.
-	 * @param string $name
-	 *   Channel name.
-	 * @param HandlerInterface[] $handlers
-	 *   Provide custom handlers to the logger.
-	 *
-	 * @return LoggerInterface
-	 */
-	public function channel( \WP_User $user, string $name, $handlers = [] ) {
-		$logger = new UserLogger( $user, $name );
-		foreach ( $handlers as $handler ) {
-			$logger->pushHandler( $handler );
-		}
-
-		if ( empty( $logger->getHandlers() ) ) {
-			$logger->pushHandler( $this->getDbHandler() );
-		}
-
+	public function createFileLogger(string $channel, string $folder, int $log_level = UserLogger::ERROR) {
+		$file = rtrim($folder, '/') . '/' . str_replace('.', '-', $channel) . '.log';
+		$logger = new UserLogger($channel);
+		$logger->useMicrosecondTimestamps(false);
+		$logger->pushHandler(new RotatingFileHandler($file, 10, $log_level));
+		$logger->pushProcessor(new PsrLogMessageProcessor());
 		return $logger;
 	}
 
