@@ -5,7 +5,7 @@ namespace Wpx\Admin;
 /**
  * Admin page for viewing log files.
  */
-abstract class LogsFileViewer extends AdminPageBase {
+abstract class LogFilesViewer extends AdminPageBase {
 
 	/**
 	 * Location of the log files.
