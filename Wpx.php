@@ -128,7 +128,7 @@ class Wpx {
 	 *   Logger factory.
 	 */
 	public static function loggerFactory() {
-		return static::service('logger.factory');
+		return static::service('logger_factory');
 	}
 
 	/**
