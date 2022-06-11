@@ -7,6 +7,25 @@ describe('WPX Example Admin Pages', function () {
 		})
 	});
 
+	/*
+	 * ACF Pages
+	 */
+	it('Acf page can save data', () => {
+		cy.get('a.toplevel_page_acf-top-level').click()
+
+		cy.get('#acf-group_1 h2').should('contain.text', 'My Group')
+		cy.get('#acf-field_1').type('{selectAll}{del}Example value set')
+		cy.get('form#post').submit()
+
+		// Wait for the ajax submit to complete.
+		cy.wait(6000)
+
+		cy.get('#acf-field_1').should('have.value', 'Example value set')
+	})
+
+	/*
+	 * Custom pages.
+	 */
 	it('Admin page menu items exist with correct menu titles in correct order', () => {
 		cy.get('h1').should('contain.text', 'Dashboard')
 

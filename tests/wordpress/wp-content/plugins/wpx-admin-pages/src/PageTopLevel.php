@@ -10,7 +10,7 @@ class PageTopLevel extends AdminPageBase {
 	 * @inheritDoc
 	 */
 	public function slug() {
-		return 'top-level';
+		return 'wpx-top-level';
 	}
 
 	/**
