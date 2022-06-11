@@ -30,7 +30,7 @@ class Dependencies {
 
 		add_filter( 'extra_plugin_headers', [ $static, 'extraPluginHeaders' ] );
 		add_action( 'muplugins_loaded', [ $static, 'mupluginsLoaded' ] );
-		add_action( 'activate_plugin', [ $static, 'activatePluginDependencies', 100, 2 ] );
+		add_action( 'activate_plugin', [ $static, 'activatePluginDependencies'], 100, 2 );
 	}
 
 	/**

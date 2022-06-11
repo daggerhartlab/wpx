@@ -40,7 +40,7 @@ tooling:
 
   wp:
     service: appserver
-    dir: /app/tests
+    dir: /app/tests/wordpress
     cmd: vendor/bin/wp
 
   wp-setup:
