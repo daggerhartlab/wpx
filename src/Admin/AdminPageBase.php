@@ -216,7 +216,8 @@ abstract class AdminPageBase {
 			$this->menuTitle(),
 			$this->capability(),
 			$this->slug(),
-			[ $this, 'route' ]
+			[ $this, 'route' ],
+			$position
 		);
 	}
 
@@ -324,7 +325,7 @@ abstract class AdminPageBase {
 		}
 		?>
 		<div class="wrap <?php print $this->slug() ?>-wrapper">
-			<h2><?php print $this->title(); ?></h2>
+			<h1><?php print $this->title(); ?></h1>
 
 			<?php if ( ! empty( $messages ) ): ?>
 				<div id="message">

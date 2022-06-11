@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
 # wp-config.php
-./vendor/bin/wp config create --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --dbhost=database > /dev/null 2>&1 || true
-./vendor/bin/wp config set __autoload "require_once __DIR__ . '/vendor/autoload.php'" --anchor="/**" --type=variable --add --raw
+./vendor/bin/wp config create \
+  --dbname=wordpress \
+  --dbuser=wordpress \
+  --dbpass=wordpress \
+  --dbhost=database \
+  --config-file=./wp-config.php \
+  > /dev/null 2>&1 || true
+./vendor/bin/wp config set __autoload "require_once __DIR__ . '/vendor/autoload.php'" --anchor="<?php" --placement=after --type=variable --add --raw
 ./vendor/bin/wp config set WP_DEBUG true --add --raw
 ./vendor/bin/wp config set WP_DEBUG_DISPLAY true --add --raw
 ./vendor/bin/wp config set ABSPATH "__DIR__ . '/wp/'" --add --raw
