@@ -1,0 +1,42 @@
+{
+    "name": "wpx/tests",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "johnpbloch/wordpress": "^6.0",
+        "symfony/var-dumper": "^5.4",
+        "wp-cli/wp-cli-bundle": "^2.6",
+        "wpackagist-plugin/advanced-custom-fields": "*"
+    },
+    "extra": {
+        "wordpress-install-dir": "wp",
+        "installer-paths": {
+            "wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+            "wp-content/themes/{$name}/": ["type:wordpress-theme"],
+            "wp-content/mu-plugins//{$name}/": ["type:wordpress-muplugin"]
+        }
+    },
+    "autoload": {
+        "files": [
+            "../../vendor/autoload.php"
+        ]
+    },
+    "config": {
+        "vendor-dir": "vendor",
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4"
+        },
+        "allow-plugins": {
+            "johnpbloch/wordpress-core-installer": true,
+            "composer/installers": true
+        }
+    }
+}

@@ -1,0 +1,17 @@
+/vendor
+/wp
+/composer.lock
+/latest.tar.gz
+/wp-config.php
+/wp-content/*
+!/wp-content/mu-plugins
+!/wp-content/plugins
+!/wp-content/themes
+
+# Ignore contrib plugins and themes
+/wp-content/mu-plugins/*
+!/wp-content/mu-plugins/wpx-*
+/wp-content/plugins/*
+!/wp-content/plugins/wpx-*
+/wp-content/themes/*
+!/wp-content/themes/wpx-*

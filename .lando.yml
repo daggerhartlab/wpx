@@ -1,0 +1,56 @@
+name: wpx
+recipe: wordpress
+config:
+  webroot: tests/wordpress
+  composer_version: '2'
+
+# Services.
+services:
+  appserver:
+    build_as_root:
+      # Use bash instead of sh
+      - rm -fr /bin/sh && ln -s /bin/bash /bin/sh
+    build:
+      - composer install
+      - chmod +x /app/tests/scripts/*.sh
+
+  pma:
+    type: phpmyadmin
+    hosts:
+      - database
+
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
+
+# Services urls.
+proxy:
+  mailhog:
+    - wpx-mail.lndo.site
+
+  pma:
+    - wpx-db.lndo.site
+
+# Custom commands.
+tooling:
+  which:
+    service: appserver
+    cmd: which
+
+  wp:
+    service: appserver
+    dir: /app/tests
+    cmd: vendor/bin/wp
+
+  wp-setup:
+    service: appserver
+    dir: /app/tests/wordpress
+    cmd:
+      - ../scripts/wp-setup.sh
+
+  testing-update:
+    service: appserver
+    dir: /app/tests/wordpress
+    cmd:
+      - composer update -W
