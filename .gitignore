@@ -1,6 +1,8 @@
 /vendor/
 .idea
 .env
+.DS_Store
 
 # Testing
 .lando.local.yml
+/tests/local.config.json
