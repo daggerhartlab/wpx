@@ -1,6 +1,8 @@
 <?php
 
 use DI\ContainerBuilder;
+use Wpx\DependencyInjection\Container;
+use Wpx\DependencyInjection\ContainerInterface;
 
 /**
  * Wpx container instance repository and service locator.
@@ -12,18 +14,18 @@ class Wpx {
 	/**
 	 * The currently active container object, or NULL if not initialized yet.
 	 *
-	 * @var \Psr\Container\ContainerInterface|null
+	 * @var ContainerInterface|null
 	 */
 	protected static $container;
 
 	/**
 	 * Build a new container instance.
 	 *
-	 * @return \Psr\Container\ContainerInterface
+	 * @return ContainerInterface
 	 *   New container instance.
 	 */
 	protected static function buildContainer() {
-		$builder = new ContainerBuilder();
+		$builder = new ContainerBuilder( Container::class);
 		$builder->useAutowiring(FALSE);
 		$builder->useAnnotations(FALSE);
 		$definitions_files = apply_filters( 'wpx.services/definitions', [
@@ -34,16 +36,18 @@ class Wpx {
 			$builder->addDefinitions($file);
 		}
 
-		return $builder->build();
+		/** @var ContainerInterface $container */
+		$container = $builder->build();
+		return $container;
 	}
 
 	/**
 	 * Get the container.
 	 *
-	 * @return \Psr\Container\ContainerInterface
+	 * @return ContainerInterface
 	 *   Static container instance.
 	 */
-	public static function getContainer() {
+	public static function getContainer(): ContainerInterface {
 		if ( static::$container === NULL ) {
 			$container = static::buildContainer();
 		}
@@ -86,7 +90,7 @@ class Wpx {
 	 * @return bool
 	 *   TRUE if the specified service exists, FALSE otherwise.
 	 */
-	public static function hasService( $id ): bool {
+	public static function hasService( string $id ): bool {
 		// Check hasContainer() first in order to always return a Boolean.
 		return static::hasContainer() && static::getContainer()->has($id);
 	}
@@ -97,7 +101,7 @@ class Wpx {
 	 * @return \wpdb
 	 *   WordPress database instance.
 	 */
-	public static function database() {
+	public static function database(): \wpdb {
 		return static::service( 'database' );
 	}
 
@@ -107,7 +111,7 @@ class Wpx {
 	 * @return \WP_User
 	 *   Current WP user.
 	 */
-	public static function currentUser() {
+	public static function currentUser(): \WP_User {
 		return static::service( 'current_user' );
 	}
 

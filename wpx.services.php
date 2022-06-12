@@ -15,25 +15,32 @@
 
 use Psr\Container\ContainerInterface;
 use Wpx\Messenger\MessengerUser;
+use Wpx\Service\ConfigFactory;
 use Wpx\Service\EnvironmentDetector;
 use Wpx\Service\LoggerFactory;
 use function DI\create;
 
 // @codingStandardsIgnoreStart
 return [
+	'config_factory' => create( ConfigFactory::class),
+
 	'current_user' => function() {
 		return \wp_get_current_user();
 	},
+
 	'database' => function() {
 		global $wpdb;
 		return $wpdb;
 	},
+
 	'env.detector' => create( EnvironmentDetector::class ),
+
 	'logger_factory' => function( ContainerInterface $container ) {
 		return new LoggerFactory(
 			$container->get( 'database' )
 		);
 	},
+
 	'messenger' => function( ContainerInterface $container ) {
 		return new MessengerUser( $container->get( 'current_user' ) );
 	}
