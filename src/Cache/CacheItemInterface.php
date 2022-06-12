@@ -64,4 +64,11 @@ interface CacheItemInterface {
 	 */
 	public function save( int $timeout ): bool;
 
+	/**
+	 * Delete the cache item from the data store.
+	 *
+	 * @return bool
+	 */
+	public function delete(): bool;
+
 }

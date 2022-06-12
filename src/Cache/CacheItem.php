@@ -110,4 +110,11 @@ class CacheItem implements CacheItemInterface {
 
 		return \set_transient( $this->name(), $this->data(), $this->timeout() );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function delete(): bool {
+		return \delete_transient( $this->name() );
+	}
 }
