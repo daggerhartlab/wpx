@@ -2,7 +2,7 @@
 
 namespace Wpx\Plugin;
 
-use Psr\Container\ContainerInterface;
+use Wpx\DependencyInjection\ContainerInterface;
 
 /**
  * Interface PluginInterface.
