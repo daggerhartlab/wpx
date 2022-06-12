@@ -3,6 +3,7 @@ recipe: wordpress
 config:
   webroot: tests/wordpress
   composer_version: '2'
+  php: '7.3'
 
 # Services.
 services:
