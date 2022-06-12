@@ -16,6 +16,6 @@ interface PluginInterface {
 	 *
 	 * @param ContainerInterface $container Container.
 	 */
-	public static function boostrap( ContainerInterface $container );
+	public static function bootstrap( ContainerInterface $container );
 
 }
