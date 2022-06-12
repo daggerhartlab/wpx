@@ -43,12 +43,12 @@ class OptionsConfig extends AbstractConfig implements ConfigInterface {
 	 * @param string|int|bool $autoload Truthy.
 	 * @param int|null $blog_id
 	 */
-	public function __construct(string $option_name, array $data = [], array $default_value = [], $autoload = null, int $blog_id = null) {
+	public function __construct( string $option_name, array $data = [], array $default_value = [], $autoload = null, int $blog_id = null ) {
 		$this->optionName = $option_name;
 		$this->defaultValue = $default_value;
 		$this->autoload = $autoload;
 		$this->blogId = $blog_id;
-		parent::__construct($data);
+		parent::__construct( $data );
 	}
 
 	/**
@@ -65,7 +65,7 @@ class OptionsConfig extends AbstractConfig implements ConfigInterface {
 	 * @return $this
 	 */
 	public function set( $key, $value ) {
-		parent::set($key, $value);
+		parent::set( $key, $value );
 		return $this;
 	}
 
@@ -73,7 +73,7 @@ class OptionsConfig extends AbstractConfig implements ConfigInterface {
 	 * @inheritDoc
 	 */
 	public function save(): bool {
-		return \update_option($this->optionName, $this->data, $this->autoload);
+		return \update_option( $this->optionName, $this->data, $this->autoload );
 	}
 
 }

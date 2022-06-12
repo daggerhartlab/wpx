@@ -15,6 +15,7 @@
 
 use Psr\Container\ContainerInterface;
 use Wpx\Messenger\MessengerUser;
+use Wpx\Service\CacheFactory;
 use Wpx\Service\ConfigFactory;
 use Wpx\Service\EnvironmentDetector;
 use Wpx\Service\LoggerFactory;
@@ -22,6 +23,8 @@ use function DI\create;
 
 // @codingStandardsIgnoreStart
 return [
+	'cache_factory' => create( CacheFactory::class),
+
 	'config_factory' => create( ConfigFactory::class),
 
 	'current_user' => function() {
