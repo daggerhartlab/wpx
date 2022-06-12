@@ -6,14 +6,23 @@ use Wpx\Admin\AdminPageBase;
 
 class AdminConfigPage extends AdminPageBase {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function slug() {
 		return 'example-option-config';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function title() {
 		return 'Example Option Config';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function actions() {
 		return [
 			'update-config' => [ $this, 'actionUpdateConfig' ],
@@ -21,26 +30,13 @@ class AdminConfigPage extends AdminPageBase {
 	}
 
 	/**
+	 * Give myself some easy way to get the config objects I want to deal with.
+	 * The approach shown in arbitrary.
+	 *
 	 * @return \Wpx\Config\ConfigInterface
 	 */
 	protected function config() {
-		return $this->getConfig('example-option-name', [
-			'first_value' => 'default',
-			'second_value' => 'default',
-			'third_is_array' => [
-				'string' => 'default',
-				'boolean' => false,
-				'integer' => 0,
-				'float' => 0.01,
-				'array' => [
-					'nested_string' => 'default',
-					'nested_boolean' => false,
-					'nested_integer' => 0,
-					'nested_float' => 0.01,
-				],
-			],
-			'etc' => 'default',
-		]);
+		return $this->getConfig('example-config' );
 	}
 
 	/**

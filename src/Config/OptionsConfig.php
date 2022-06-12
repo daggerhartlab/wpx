@@ -64,7 +64,7 @@ class OptionsConfig extends AbstractConfig implements ConfigInterface {
 	 *
 	 * @return $this
 	 */
-	public function set( $key, $value ) {
+	public function set( $key, $value ): ConfigInterface {
 		parent::set( $key, $value );
 		return $this;
 	}

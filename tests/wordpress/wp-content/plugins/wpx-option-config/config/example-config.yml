@@ -1,0 +1,13 @@
+first_value: default
+second_value: default
+third_is_array:
+  string: default
+  boolean: false
+  integer: 0
+  float: 0.01
+  array:
+    nested_string: default
+    nested_boolean: false
+    nested_integer: 0
+    nested_float: 0.01
+etc: default

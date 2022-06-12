@@ -15,7 +15,7 @@ interface ConfigInterface extends NoodlehausConfigInterface {
 	 *
 	 * @return $this
 	 */
-	public function set( $key, $value );
+	public function set( $key, $value ): ConfigInterface;
 
 	/**
 	 * @return bool

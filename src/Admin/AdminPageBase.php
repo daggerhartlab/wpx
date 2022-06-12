@@ -10,7 +10,7 @@ use Wpx\Messenger\MessengerUser;
 use Wpx\Service\ConfigFactory;
 
 /**
- * Class PageBase
+ * Class PageBase.
  *
  * @package Wpx\AdminPage
  */
@@ -85,11 +85,7 @@ abstract class AdminPageBase implements ContainerInjectionInterface {
 	}
 
 	/**
-	 * @param ContainerInterface $container
-	 *
-	 * @return static
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
+	 * @inheritDoc
 	 */
 	public static function create(ContainerInterface $container) {
 		$static = new static();
@@ -130,6 +126,8 @@ abstract class AdminPageBase implements ContainerInjectionInterface {
 	}
 
 	/**
+	 * Set the config factory instance.
+	 *
 	 * @param ConfigFactory $config_factory
 	 */
 	public function setConfigFactory( ConfigFactory $config_factory ) {
@@ -137,6 +135,8 @@ abstract class AdminPageBase implements ContainerInjectionInterface {
 	}
 
 	/**
+	 * Get a config object from the config factory.
+	 *
 	 * @param string $option_name
 	 * @param array $default_value
 	 *

@@ -13,10 +13,11 @@
  * @link https://php-di.org/doc/php-definitions.html#factories
  */
 
-use Psr\Container\ContainerInterface;
+use Wpx\DependencyInjection\ContainerInterface;
 use Wpx\Messenger\MessengerUser;
 use Wpx\Service\CacheFactory;
 use Wpx\Service\ConfigFactory;
+use Wpx\Service\ConfigLoader;
 use Wpx\Service\EnvironmentDetector;
 use Wpx\Service\LoggerFactory;
 use function DI\create;
@@ -25,7 +26,13 @@ use function DI\create;
 return [
 	'cache_factory' => create( CacheFactory::class),
 
-	'config_factory' => create( ConfigFactory::class),
+	'config_loader' => create( ConfigLoader::class),
+
+	'config_factory' => function( ContainerInterface $container) {
+		return new ConfigFactory(
+			$container->get('config_loader')
+		);
+	},
 
 	'current_user' => function() {
 		return \wp_get_current_user();
