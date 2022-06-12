@@ -31,10 +31,10 @@ class ConfigLoader {
 	protected function loadDefaults() {
 		$finder = new Finder();
 		$finder
-			//->ignoreUnreadableDirs()
-			->in(WP_CONTENT_DIR . '/plugins/*/config')
+			->ignoreUnreadableDirs()
+			->in( WP_CONTENT_DIR . '/plugins/*/config' )
 			->files()
-			->name([ '*.yml', '*.yaml' ]);
+			->name( ['*.yml', '*.yaml'] );
 
 		foreach ($finder as $file) {
 			$config_name = $file->getBasename( '.' . $file->getExtension() );

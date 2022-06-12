@@ -1,6 +1,7 @@
 <?php
 
 use DI\ContainerBuilder;
+use Symfony\Component\Finder\Finder;
 use Wpx\DependencyInjection\Container;
 use Wpx\DependencyInjection\ContainerInterface;
 
@@ -28,9 +29,8 @@ class Wpx {
 		$builder = new ContainerBuilder( Container::class);
 		$builder->useAutowiring(FALSE);
 		$builder->useAnnotations(FALSE);
-		$definitions_files = apply_filters( 'wpx.services/definitions', [
-			__DIR__ . '/wpx.services.php',
-		] );
+
+		$definitions_files = static::locateDefinitionsFiles();
 
 		foreach ($definitions_files as $file) {
 			$builder->addDefinitions($file);
@@ -39,6 +39,30 @@ class Wpx {
 		/** @var ContainerInterface $container */
 		$container = $builder->build();
 		return $container;
+	}
+
+	/**
+	 * Automatically locate plugin's services when defined in a file named
+	 * 'wpx.services.php'.
+	 *
+	 * @return array
+	 */
+	protected static function locateDefinitionsFiles() {
+		$definitions_files = [ __DIR__ . '/wpx.services.php' ];
+
+		$finder = new Finder();
+		$finder
+			->ignoreUnreadableDirs()
+			->in( WP_CONTENT_DIR . '/plugins/*' )
+			->depth('<=1')
+			->files()
+			->name( 'wpx.services.php' );
+
+		foreach ($finder as $file) {
+			$definitions_files[] = $file->getRealPath();
+		}
+
+		return apply_filters( 'wpx.services/definitions', $definitions_files );
 	}
 
 	/**
