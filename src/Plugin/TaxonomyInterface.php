@@ -2,7 +2,9 @@
 
 namespace Wpx\Plugin;
 
-interface TaxonomyInterface {
+use Wpx\DependencyInjection\ContainerInjectionInterface;
+
+interface TaxonomyInterface extends ContainerInjectionInterface {
 
 	/**
 	 * Taxonomy slug.
@@ -10,13 +12,6 @@ interface TaxonomyInterface {
 	 * @return string
 	 */
 	public static function slug();
-
-	/**
-	 * Entry point.
-	 *
-	 * @return void
-	 */
-	public static function bootstrap();
 
 	/**
 	 * Register the taxonomy.

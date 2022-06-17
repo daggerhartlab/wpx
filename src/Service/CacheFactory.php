@@ -2,7 +2,7 @@
 
 namespace Wpx\Service;
 
-use Wpx\Cache\CacheItem;
+use Wpx\Cache\CacheItemTransient;
 use Wpx\Cache\CacheItemInterface;
 
 /**
@@ -31,7 +31,7 @@ class CacheFactory {
 			unset( $this->caches[ $cache_id ] );
 		}
 
-		$this->caches[ $cache_id ] = new CacheItem( $cache_id, $allow_invalid );
+		$this->caches[ $cache_id ] = new CacheItemTransient( $cache_id, $allow_invalid );
 
 		return $this->caches[ $cache_id ];
 	}

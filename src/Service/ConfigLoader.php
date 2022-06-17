@@ -8,7 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Config loader will find config default value files stored as yaml in plugins.
  */
-class ConfigLoader {
+class ConfigLoader implements ConfigLoaderInterface {
 
 	/**
 	 * @var array[]
@@ -43,18 +43,14 @@ class ConfigLoader {
 	}
 
 	/**
-	 * @param string $config_name
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function has( string $config_name ): bool {
 		return isset( $this->items[ $config_name ] );
 	}
 
 	/**
-	 * @param string $config_name
-	 *
-	 * @return array
+	 * @inheritDoc
 	 */
 	public function get( string $config_name ): array {
 		return $this->items[ $config_name ];

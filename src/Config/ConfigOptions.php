@@ -7,7 +7,7 @@ use Noodlehaus\AbstractConfig;
 /**
  * Config object based on wp_options value.
  */
-class OptionsConfig extends AbstractConfig implements ConfigInterface {
+class ConfigOptions extends AbstractConfig implements ConfigInterface {
 
 	/**
 	 * @var int|null

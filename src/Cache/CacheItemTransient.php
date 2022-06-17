@@ -5,7 +5,7 @@ namespace Wpx\Cache;
 /**
  * Cache item (transient by default).
  */
-class CacheItem implements CacheItemInterface {
+class CacheItemTransient implements CacheItemInterface {
 
 	/**
 	 * @var bool

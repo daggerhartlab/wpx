@@ -2,7 +2,9 @@
 
 namespace Wpx\Plugin;
 
-interface PostTypeInterface {
+use Wpx\DependencyInjection\ContainerInjectionInterface;
+
+interface PostTypeInterface extends ContainerInjectionInterface {
 
 	/**
 	 * Post type slug.
@@ -10,13 +12,6 @@ interface PostTypeInterface {
 	 * @return string
 	 */
 	public static function slug();
-
-	/**
-	 * Entry point.
-	 *
-	 * @return void
-	 */
-	public static function bootstrap();
 
 	/**
 	 * Register the post type.
