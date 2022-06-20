@@ -2,6 +2,7 @@
 .idea
 .env
 .DS_Store
+composer.lock
 
 # Testing
 .lando.local.yml
