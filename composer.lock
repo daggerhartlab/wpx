@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "487fb332ad5f8b5e6cc4befb8904b1d4",
+    "content-hash": "5c85a837042a5e3ac1ca3c6b6cce1fca",
     "packages": [
         {
             "name": "hassankhan/config",
