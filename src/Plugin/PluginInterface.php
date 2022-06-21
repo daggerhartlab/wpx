@@ -2,6 +2,7 @@
 
 namespace Wpx\Plugin;
 
+use Wpx\DependencyInjection\ContainerAwareInterface;
 use Wpx\DependencyInjection\ContainerInterface;
 
 /**
@@ -9,7 +10,7 @@ use Wpx\DependencyInjection\ContainerInterface;
  *
  * @package Wpx
  */
-interface PluginInterface {
+interface PluginInterface extends ContainerAwareInterface {
 
 	/**
 	 * Container.

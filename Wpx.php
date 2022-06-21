@@ -53,7 +53,7 @@ class Wpx {
 		$finder = new Finder();
 		$finder
 			->ignoreUnreadableDirs()
-			->in( WP_CONTENT_DIR . '/plugins/*' )
+			->in( static::findExtensionsDirectories() )
 			->depth('<=1')
 			->files()
 			->name( 'wpx.services.php' );
@@ -63,6 +63,42 @@ class Wpx {
 		}
 
 		return apply_filters( 'wpx.services/definitions', $definitions_files );
+	}
+
+	/**
+	 * Attempt to find WordPress plugins / themes directory.
+	 *
+	 * @return array
+	 */
+	protected static function findExtensionsDirectories() {
+		if (defined('WP_CONTENT_DIR')) {
+			return [
+				WP_CONTENT_DIR . '/plugins/*',
+				WP_CONTENT_DIR . '/themes/*',
+			];
+		}
+
+		$find = new Symfony\Component\Finder\Finder();
+		$find->directories()
+			->path([
+				'wp-content/plugins',
+				'wp-content/themes',
+			])
+			->name([
+				'plugins',
+				'themes',
+			])
+		    ->in([
+				ABSPATH,
+			    ABSPATH . '../',
+		    ])
+		    ->depth('<=3');
+
+		$found = [];
+		foreach ($find as $directory) {
+			$found[] = $directory->getRealPath() . '/*';
+		}
+		return $found;
 	}
 
 	/**
@@ -117,6 +153,20 @@ class Wpx {
 	public static function hasService( string $id ): bool {
 		// Check hasContainer() first in order to always return a Boolean.
 		return static::hasContainer() && static::getContainer()->has($id);
+	}
+
+	/**
+	 * @param string $name
+	 * @param $default_value
+	 *
+	 * @return \Wpx\Config\ConfigInterface
+	 */
+	public static function config( string $name, $default_value = null ): \Wpx\Config\ConfigInterface {
+		if ( static::hasService( 'config_factory' ) ) {
+			return static::service( 'config_factory' )->create( $name, $default_value );
+		}
+
+		throw new \RuntimeException("No config factory found in container.");
 	}
 
 	/**

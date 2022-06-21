@@ -10,8 +10,24 @@ use Noodlehaus\ConfigInterface as NoodlehausConfigInterface;
 interface ConfigInterface extends NoodlehausConfigInterface {
 
 	/**
-	 * @param $key
-	 * @param $value
+	 * Gets a configuration setting using a simple or nested key.
+	 * Nested keys are similar to JSON paths that use the dot
+	 * notation.
+	 *
+	 * @param  string $key
+	 * @param  mixed  $default
+	 *
+	 * @return mixed
+	 */
+	public function get($key, $default = null);
+
+	/**
+	 * Set a config item value.
+	 *
+	 * @param string $key
+	 *   Name of the config item.
+	 * @param array $value
+	 *  Array of values for this config item.
 	 *
 	 * @return $this
 	 */

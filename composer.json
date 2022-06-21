@@ -14,9 +14,9 @@
         "php-di/php-di": "^6.3",
         "monolog/monolog": "^2.0",
         "hassankhan/config": "^3.0",
-        "symfony/options-resolver": "^4.4 || ^5.4",
-        "symfony/finder": ">2.7",
-        "symfony/yaml": "^4.4 || ^5.4"
+        "symfony/options-resolver": ">=3.4",
+        "symfony/finder": ">=2.7",
+        "symfony/yaml": ">=3.4"
     },
     "autoload": {
         "classmap": [
