@@ -8,6 +8,8 @@ namespace Wpx\Cache;
 class CacheItemTransient implements CacheItemInterface {
 
 	/**
+	 * Allow the retrieval of invalid (expired) cache items.
+	 *
 	 * @var bool
 	 */
 	protected $allowInvalid = false;
@@ -20,23 +22,31 @@ class CacheItemTransient implements CacheItemInterface {
 	protected $valid = true;
 
 	/**
+	 * Unique cache item name.
+	 *
 	 * @var string
 	 */
 	protected $name;
 
 	/**
+	 * Expiration timeout in seconds relative to now.
+	 *
 	 * @var int
 	 */
 	protected $timeout;
 
 	/**
+	 * Data to be cached.
+	 *
 	 * @var mixed
 	 */
 	protected $data;
 
 	/**
 	 * @param string $cache_id
+	 *   Unique cache id.
 	 * @param bool $allow_invalid
+	 *   Whether invalid (expired) caches can be retrieved.
 	 */
 	public function __construct( string $cache_id, bool $allow_invalid = false ) {
 		$this->name         = $cache_id;

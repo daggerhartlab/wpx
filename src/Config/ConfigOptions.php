@@ -2,29 +2,37 @@
 
 namespace Wpx\Config;
 
-use Noodlehaus\AbstractConfig;
+use DaggerhartLab\Collections\TraversableRegistry;
 
 /**
  * Config object based on wp_options value.
  */
-class ConfigOptions extends AbstractConfig implements ConfigInterface {
+class ConfigOptions extends TraversableRegistry implements ConfigInterface {
 
 	/**
+	 * WP Blog id (in support of multisite).
+	 *
 	 * @var int|null
 	 */
 	protected $blogId;
 
 	/**
+	 * Unique config item name.
+	 *
 	 * @var string
 	 */
 	protected $optionName;
 
 	/**
+	 * Actual value for config item.
+	 *
 	 * @var array
 	 */
 	protected $data = [];
 
 	/**
+	 * Default value for the config item.
+	 *
 	 * @var array
 	 */
 	protected $defaultValue = [];
@@ -38,10 +46,15 @@ class ConfigOptions extends AbstractConfig implements ConfigInterface {
 
 	/**
 	 * @param string $option_name
+	 *   Unique name for the config value.
 	 * @param array $data
+	 *   Actual values.
 	 * @param array $default_value
+	 *   Default values.
 	 * @param string|int|bool $autoload Truthy.
+	 *   WordPress option autoload.
 	 * @param int|null $blog_id
+	 *   Blog Id.
 	 */
 	public function __construct( string $option_name, array $data = [], array $default_value = [], $autoload = null, int $blog_id = null ) {
 		$this->optionName = $option_name;
@@ -52,21 +65,13 @@ class ConfigOptions extends AbstractConfig implements ConfigInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function getDefaults() {
-		return $this->defaultValue;
-	}
-
-	/**
-	 * @param string $key
-	 * @param mixed $value
+	 * Get the default value of the config item.
 	 *
-	 * @return $this
+	 * @return array
+	 *   Default value.
 	 */
-	public function set( $key, $value ): ConfigInterface {
-		parent::set( $key, $value );
-		return $this;
+	public function getDefaults(): array {
+		return $this->defaultValue;
 	}
 
 	/**

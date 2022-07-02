@@ -17,38 +17,36 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 	 * If set to false, this parent page will appear alongside any child pages as its own page.
 	 *
 	 * @return bool
-	 * @link
-	 *
 	 */
-	public function acfRedirect() {
+	public function acfRedirect(): bool {
 		return false;
 	}
 
 	/**
-	 * @return string|void
+	 * @return string
 	 */
-	public function acfUpdateButton() {
+	public function acfUpdateButton(): string {
 		return __( 'Save Settings' );
 	}
 
 	/**
-	 * @return string|void
+	 * @return string
 	 */
-	public function acfUpdatedMessage() {
+	public function acfUpdatedMessage(): string {
 		return __( 'Settings Updated' );
 	}
 
 	/**
 	 * @return array
 	 */
-	public function acfDefaultPageArray() {
+	public function acfDefaultPageArray(): array {
 		return [
-			'page_title'      => $this->title(),
-			'menu_title'      => $this->menuTitle(),
-			'menu_slug'       => $this->slug(),
-			'capability'      => $this->capability(),
-			'redirect'        => $this->acfRedirect(),
-			'update_button'   => $this->acfUpdateButton(),
+			'page_title' => $this->title(),
+			'menu_title' => $this->menuTitle(),
+			'menu_slug' => $this->slug(),
+			'capability' => $this->capability(),
+			'redirect' => $this->acfRedirect(),
+			'update_button' => $this->acfUpdateButton(),
 			'updated_message' => $this->acfUpdatedMessage(),
 		];
 	}
@@ -65,7 +63,7 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 	}
 
 	/**
-	 * @return \string[][][]
+	 * @return array
 	 */
 	public function acfFieldGroupLocation(): array {
 		return [
@@ -121,7 +119,6 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 		$parent_slug = !empty($this->acfPage['parent_slug']) ? $this->acfPage['parent_slug'] : 'toplevel';
 		$this->pageHook = "{$parent_slug}_page_{$this->slug()}";
 
-
 		add_action('acf/form_data', [$this, 'showPageTop']);
 		add_action($this->pageHook, [$this, 'showPage'], 100);
 	}
@@ -149,7 +146,7 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 	 * @return void
 	 */
 	public function showPageTop() {
-		if (!$this->onPage()) {
+		if ( ! $this->onPage() ) {
 			return;
 		}
 
@@ -158,7 +155,6 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 		if ( ! empty( $descriptions ) && ! is_array( $descriptions ) ) {
 			$descriptions = [ $descriptions ];
 		}
-		dump($descriptions);
 		?>
 		<div class="wrap <?php print $this->slug() ?>-wrapper">
 			<?php if ( ! empty( $messages ) ): ?>
