@@ -14,6 +14,8 @@ trait ContainerAwareTrait
 	protected $container;
 
 	/**
+	 * Set the container.
+	 *
 	 * @param ContainerInterface|null $container
 	 *
 	 * @return void
@@ -22,4 +24,13 @@ trait ContainerAwareTrait
 		$this->container = $container;
 	}
 
+	/**
+	 * Get the container.
+	 *
+	 * @return ContainerInterface
+	 */
+	public function setContainer() {
+		return $this->container;
+	}
+	
 }

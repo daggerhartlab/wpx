@@ -38,8 +38,25 @@ class ConfigLoader implements ConfigLoaderInterface {
 
 		foreach ($finder as $file) {
 			$config_name = $file->getBasename( '.' . $file->getExtension() );
-			$this->items[ $config_name ] = Yaml::parseFile( $file->getRealPath() );
+			$this->items[ $config_name ] = $this->yamlParse( $file->getRealPath() );
 		}
+	}
+
+	/**
+	 * Parse contents of given file name.
+	 *
+	 * @param string $filepath
+	 *   Yaml absolute filepath.
+	 *
+	 * @return array
+	 *   Results.
+	 */
+	protected function yamlParse( string $filepath ) {
+		if ( method_exists( Yaml::class, 'parseFile' ) ) {
+			return Yaml::parseFile( $filepath );
+		}
+
+		return Yaml::parse( file_get_contents( $filepath ) );
 	}
 
 	/**
