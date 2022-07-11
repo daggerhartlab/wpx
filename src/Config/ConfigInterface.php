@@ -2,12 +2,12 @@
 
 namespace Wpx\Config;
 
-use DaggerhartLab\Collections\RegistryInterface;
+use DaggerhartLab\Collections\Map\MapInterface;
 
 /**
  * Interface proxy for config objects.
  */
-interface ConfigInterface extends RegistryInterface {
+interface ConfigInterface extends MapInterface {
 
 	/**
 	 * Save the config value.

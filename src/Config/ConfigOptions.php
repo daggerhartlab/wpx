@@ -2,12 +2,12 @@
 
 namespace Wpx\Config;
 
-use DaggerhartLab\Collections\TraversableRegistry;
+use DaggerhartLab\Collections\Map\TraversableMap;
 
 /**
  * Config object based on wp_options value.
  */
-class ConfigOptions extends TraversableRegistry implements ConfigInterface {
+class ConfigOptions extends TraversableMap implements ConfigInterface {
 
 	/**
 	 * WP Blog id (in support of multisite).
