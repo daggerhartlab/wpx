@@ -2,8 +2,11 @@
 
 use DI\ContainerBuilder;
 use Symfony\Component\Finder\Finder;
+use Wpx\Config\ConfigInterface;
 use Wpx\DependencyInjection\Container;
 use Wpx\DependencyInjection\ContainerInterface;
+use Wpx\Messenger\MessengerInterface;
+use Wpx\Service\LoggerFactory;
 
 /**
  * Wpx container instance repository and service locator.
@@ -159,14 +162,10 @@ class Wpx {
 	 * @param string $name
 	 * @param $default_value
 	 *
-	 * @return \Wpx\Config\ConfigInterface
+	 * @return ConfigInterface
 	 */
-	public static function config( string $name, $default_value = null ): \Wpx\Config\ConfigInterface {
-		if ( static::hasService( 'config_factory' ) ) {
-			return static::service( 'config_factory' )->create( $name, $default_value );
-		}
-
-		throw new \RuntimeException("No config factory found in container.");
+	public static function config( string $name, $default_value = null ): ConfigInterface {
+		return static::service( 'config_factory' )->get( $name, $default_value );
 	}
 
 	/**
@@ -202,20 +201,20 @@ class Wpx {
 	/**
 	 * Get Logger factory.
 	 *
-	 * @return \Wpx\Service\LoggerFactory
+	 * @return LoggerFactory
 	 *   Logger factory.
 	 */
-	public static function loggerFactory() {
+	public static function loggerFactory(): LoggerFactory {
 		return static::service('logger_factory');
 	}
 
 	/**
 	 * Get messenger instance.
 	 *
-	 * @return \Wpx\Messenger\MessengerInterface
+	 * @return MessengerInterface
 	 *   Messenger instance.
 	 */
-	public static function messenger() {
+	public static function messenger(): MessengerInterface {
 		return static::service( 'messenger' );
 	}
 

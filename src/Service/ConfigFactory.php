@@ -76,7 +76,7 @@ class ConfigFactory implements ConfigFactoryInterface {
 		// Get value from DB and allow for ACF values.
 		$value = \get_option( $config_name, $default_value );
 		if ( function_exists( 'get_field' ) && \get_option( "options_{$config_name}" ) !== false ) {
-			$value = \get_field( $config_name, 'option' );
+			$value = \get_field( $config_name, 'option' ) ?: [];
 		}
 
 		// If the value is a numeric array, unset the default value so the
