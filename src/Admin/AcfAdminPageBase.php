@@ -198,7 +198,7 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 			<div class="<?php print $this->slug() ?>-content postbox acf-postbox">
 				<div class="inside acf-fields">
 					<div class="acf-field">
-						<?php print $this->content() ?>
+						<?php print $content ?>
 					</div>
 				</div>
 			</div>
