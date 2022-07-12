@@ -160,11 +160,11 @@ class Wpx {
 
 	/**
 	 * @param string $name
-	 * @param $default_value
+	 * @param array $default_value
 	 *
 	 * @return ConfigInterface
 	 */
-	public static function config( string $name, $default_value = null ): ConfigInterface {
+	public static function config( string $name, array $default_value = [] ): ConfigInterface {
 		return static::service( 'config_factory' )->get( $name, $default_value );
 	}
 

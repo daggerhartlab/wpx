@@ -179,9 +179,20 @@ abstract class AcfAdminPageBase extends AdminPageBase {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function content() {}
+
+	/**
 	 * Output the custom page content.
 	 */
 	public function showPage() {
+		ob_start();
+			$this->content();
+		$content = ob_get_clean();
+		if (empty($content)) {
+			return;
+		}
 		?>
 		<div class="wrap <?php print $this->slug() ?>-wrapper">
 			<div class="<?php print $this->slug() ?>-content postbox acf-postbox">
