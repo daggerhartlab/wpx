@@ -89,6 +89,9 @@ class ConfigFactory implements ConfigFactoryInterface {
 		) {
 			$default_value = array_replace( $value, $default_value, $value );
 		}
+		else if ( empty( $default_value ) ) {
+			$default_value = $value;
+		}
 
 		$resolver = new OptionsResolver();
 		$resolver->setDefaults( $default_value );
