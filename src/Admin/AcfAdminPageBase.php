@@ -4,6 +4,8 @@ namespace Wpx\Admin;
 
 /**
  * Admin page that contains ACF fields.
+ *
+ * @deprecated ACF is not easy enough to work with to support extended integration.
  */
 abstract class AcfAdminPageBase extends AdminPageBase {
 

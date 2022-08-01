@@ -7,6 +7,8 @@ use WordPressHandler\WordPressHandler;
 
 /**
  * Simple logger table class.
+ *
+ * @deprecated Not ideal means of handling or displaying database logging. Next Thing TBD.
  */
 class LoggerTable extends \WP_List_Table {
 
