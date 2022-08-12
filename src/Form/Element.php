@@ -2,6 +2,7 @@
 
 namespace Wpx\Form;
 
+use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\ElementsCollectionInterface;
 
 class Element implements ElementInterface {

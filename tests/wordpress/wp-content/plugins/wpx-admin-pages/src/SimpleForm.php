@@ -3,7 +3,7 @@
 namespace WpxExampleAdminPages;
 
 use Wpx\Admin\AdminPageBase;
-use Wpx\Form\Attributes;
+use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Element;
 use Wpx\Form\FieldBase;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Wpx\Form;
+namespace Wpx\Form\Collection;
 
 use DaggerhartLab\Collections\Map\Map;
 
-class Attributes extends Map {
+class Attributes extends Map implements AttributesInterface {
 
 	/**
 	 * Convert the map into an HTML attributes string.
@@ -15,7 +15,7 @@ class Attributes extends Map {
 		$strings = [];
 		foreach ($this->all() as $key => $value) {
 			$string_value = is_array($value) ? implode(' ', $value) : $value;
-			$strings[] = "{$key}='" . esc_attr( $string_value ) . "'";
+			$strings[] = "{$key}='" . \esc_attr( $string_value ) . "'";
 		}
 
 		return implode(' ', $strings);

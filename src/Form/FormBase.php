@@ -2,9 +2,10 @@
 
 namespace Wpx\Form;
 
-use DaggerhartLab\Collections\Map\MapInterface;
+use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\SubmittedValues;
+use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
 class FormBase implements FormInterface {
@@ -155,7 +156,7 @@ class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getSubmittedValues(): MapInterface {
+	public function getSubmittedValues(): SubmittedValuesInterface {
 		$values = $_REQUEST[ $this->getId() ] ?? [];
 		return new SubmittedValues( $values );
 	}

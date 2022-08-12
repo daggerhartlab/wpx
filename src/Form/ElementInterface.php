@@ -2,6 +2,8 @@
 
 namespace Wpx\Form;
 
+use Wpx\Form\Collection\Attributes;
+
 interface ElementInterface {
 
 	/*

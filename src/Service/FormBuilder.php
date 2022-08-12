@@ -2,22 +2,29 @@
 
 namespace Wpx\Service;
 
-use DaggerhartLab\Collections\Map\TypedMap;
-use Wpx\Form\Attributes;
+use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\Collection\FormStylesCollection;
+use Wpx\Form\Collection\FormStylesCollectionInterface;
 use Wpx\Form\FormBase;
 use Wpx\Form\FormStyle\FormStyleInterface;
 use Wpx\Form\FormStyle\Simple;
 
 class FormBuilder {
 
+	/**
+	 * @var FormStylesCollectionInterface
+	 */
 	protected $formStyles;
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->formStyles = new TypedMap(FormStyleInterface::class);
+		// @todo - refactor to injection
+		$this->formStyles = new FormStylesCollection( [
+			'simple' => new Simple(),
+		] );
 	}
 
 	/**

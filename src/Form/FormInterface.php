@@ -2,8 +2,9 @@
 
 namespace Wpx\Form;
 
-use DaggerhartLab\Collections\Map\MapInterface;
+use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
 interface FormInterface {
@@ -121,8 +122,8 @@ interface FormInterface {
 	/**
 	 * Get all values submitted by the form.
 	 *
-	 * @return MapInterface
+	 * @return SubmittedValuesInterface
 	 */
-	public function getSubmittedValues(): MapInterface;
+	public function getSubmittedValues(): SubmittedValuesInterface;
 
 }

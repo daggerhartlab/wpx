@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\FormStyle;
 
-use Wpx\Form\Attributes;
+use Wpx\Form\Collection\Attributes;
 use Wpx\Form\ElementInterface;
 use Wpx\Form\FieldInterface;
 use Wpx\Form\FormInterface;
