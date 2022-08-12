@@ -7,18 +7,18 @@ interface FieldInterface {
 	/**
 	 * Field HTML Element, if relevant.
 	 *
-	 * @return string
+	 * @return ElementInterface
 	 */
-	public function getElement(): string;
+	public function getElement(): ElementInterface;
 
 	/**
 	 * Set the field html element.
 	 *
-	 * @param string $element
+	 * @param ElementInterface $element
 	 *
 	 * @return FieldInterface
 	 */
-	public function setElement(string $element): FieldInterface;
+	public function setElement( ElementInterface $element ): FieldInterface;
 
 	/**
 	 * @return string
@@ -79,22 +79,6 @@ interface FieldInterface {
 	 * @return FieldBase
 	 */
 	public function setValue( $value ): FieldInterface;
-
-	/**
-	 * Get field element attributes.
-	 *
-	 * @return Attributes
-	 */
-	public function getAttributes(): Attributes;
-
-	/**
-	 * Set field element attributes.
-	 *
-	 * @param Attributes $attributes
-	 *
-	 * @return FieldInterface
-	 */
-	public function setAttributes( Attributes $attributes ): FieldInterface;
 
 	/**
 	 * Get descriptors collection.

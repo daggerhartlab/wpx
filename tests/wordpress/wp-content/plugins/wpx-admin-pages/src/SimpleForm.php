@@ -3,9 +3,7 @@
 namespace WpxExampleAdminPages;
 
 use Wpx\Admin\AdminPageBase;
-use Wpx\Form\ElementInterface;
 use Wpx\Form\FieldBase;
-use Wpx\Form\FieldInterface;
 use Wpx\Form\FormBase;
 use Wpx\Form\FormStyleBase;
 
@@ -33,13 +31,13 @@ class SimpleForm extends AdminPageBase {
 		$form
 			->setFormStyle(new FormStyleBase())
 			->addField(
-				(new FieldBase('text', 'testing123', 'Test Field'))
+				(new FieldBase('input', 'text', 'testing123', 'Test Field'))
 			)
 			->addField(
-				(new FieldBase('checkbox', 'my-checkbox', 'What about checkboxes?'))
+				(new FieldBase('input', 'checkbox', 'my-checkbox', 'What about checkboxes?'))
 			)
 			->addField(
-				(new FieldBase('submit','submit'))
+				(new FieldBase('input', 'submit','submit'))
 					->setValue('Save')
 			)
 		;

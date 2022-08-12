@@ -5,9 +5,9 @@ namespace Wpx\Form;
 class FieldBase implements FieldInterface {
 
 	/**
-	 * @var string
+	 * @var ElementInterface
 	 */
-	protected $element = 'input';
+	protected $element;
 
 	/**
 	 * @var string
@@ -30,11 +30,6 @@ class FieldBase implements FieldInterface {
 	protected $value;
 
 	/**
-	 * @var Attributes
-	 */
-	protected $attributes;
-
-	/**
 	 * @var ElementsCollection
 	 */
 	protected $fieldDescriptors;
@@ -51,26 +46,30 @@ class FieldBase implements FieldInterface {
 	 * @param array $attributes
 	 *   Array of field attributes.
 	 */
-	public function __construct( string $type = 'text', string $name = '', string $label = '', array $attributes = [] ) {
+	public function __construct( string $tag = 'input', string $type = 'text', string $name = '', string $label = '', array $attributes = [] ) {
 		$this
+			->setElement(
+				( new Element() )
+					->setTag( $tag )
+					->setAttributes( new Attributes( $attributes ) )
+			)
 			->setFieldDescriptors( new ElementsCollection() )
 			->setType( $type )
 			->setName( $name )
-			->setLabel( $label )
-			->setAttributes( new Attributes( $attributes ) );
+			->setLabel( $label );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getElement(): string {
+	public function getElement(): ElementInterface {
 		return $this->element;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setElement(string $element): FieldInterface {
+	public function setElement( ElementInterface $element ): FieldInterface {
 		$this->element = $element;
 		return $this;
 	}
@@ -123,22 +122,6 @@ class FieldBase implements FieldInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getAttributes(): Attributes {
-		return $this->attributes;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setAttributes( Attributes $attributes ): FieldInterface {
-		$this->attributes = $attributes;
-
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function getValue() {
 		return $this->value;
 	}
@@ -161,8 +144,8 @@ class FieldBase implements FieldInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function setFieldDescriptors( ElementsCollection $fieldDescriptors ): FieldInterface {
-		$this->fieldDescriptors = $fieldDescriptors;
+	public function setFieldDescriptors( ElementsCollection $descriptors ): FieldInterface {
+		$this->fieldDescriptors = $descriptors;
 		return $this;
 	}
 

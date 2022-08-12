@@ -95,7 +95,7 @@ class FormStyleBase implements FormStyleInterface {
 	 */
 	public function preRenderField( FieldInterface $field, FormInterface $form ) {
 		$field->setId( $this->makeFieldId( $form, $field ) );
-		$field->getAttributes()
+		$field->getElement()->getAttributes()
 		    ->set( 'type', $field->getType() )
 			->set( 'id', $field->getId() )
 			->set( 'name', $form->getId() . '[' . $field->getName() . ']' )
@@ -105,7 +105,7 @@ class FormStyleBase implements FormStyleInterface {
 		$field = \apply_filters( "wpx.form/pre_render_field/type={$field->getType()}", $field );
 		/** @var FieldInterface $field */
 		$field = \apply_filters( "wpx.form/pre_render_field/name={$field->getName()}", $field );
-		$field->setAttributes( new Attributes( $field->getAttributes()->filter()->all() ) );
+		$field->getElement()->setAttributes( new Attributes( $field->getElement()->getAttributes()->filter()->all() ) );
 
 		// Prepare the descriptors.
 		$field->getLabel()
@@ -129,7 +129,7 @@ class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderField( FieldInterface $field ): string {
-		return "<{$field->getElement()} {$field->getAttributes()->render()}>";
+		return "<{$field->getElement()->getTag()} {$field->getElement()->getAttributes()->render()}>";
 	}
 
 	/**
