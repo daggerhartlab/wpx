@@ -16,7 +16,8 @@
         "symfony/options-resolver": ">=3.4",
         "symfony/finder": ">=2.7",
         "symfony/yaml": ">=3.4",
-        "daggerhartlab/collections": "^2"
+        "daggerhartlab/collections": "^2",
+        "symfony/http-foundation": "^5.4"
     },
     "autoload": {
         "classmap": [
