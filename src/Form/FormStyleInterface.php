@@ -39,6 +39,24 @@ interface FormStyleInterface {
 	public function renderFormClose(): string;
 
 	/**
+	 * Open field wrapper element.
+	 *
+	 * @param FieldInterface $field
+	 *
+	 * @return string
+	 */
+	public function renderFieldWrapperOpen( FieldInterface $field ): string;
+
+	/**
+	 * Close field wrapper element.
+	 *
+	 * @param FieldInterface $field
+	 *
+	 * @return string
+	 */
+	public function renderFieldWrapperClose( FieldInterface $field ): string;
+
+	/**
 	 * Adjust the field object immediately before rendering.
 	 *
 	 * @param FieldInterface $field
@@ -65,5 +83,23 @@ interface FormStyleInterface {
 	 * @return string
 	 */
 	public function renderFieldLabel( FieldInterface $field ): string;
+
+	/**
+	 * Render field description.
+	 *
+	 * @param FieldInterface $field
+	 *
+	 * @return string
+	 */
+	public function renderFieldDescription( FieldInterface $field ): string;
+
+	/**
+	 * Render field help text.
+	 *
+	 * @param FieldInterface $field
+	 *
+	 * @return string
+	 */
+	public function renderFieldHelp( FieldInterface $field ): string;
 
 }

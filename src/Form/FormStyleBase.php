@@ -29,11 +29,43 @@ class FormStyleBase implements FormStyleInterface {
 	public function renderForm( FormInterface $form ): string {
 		$this->preRenderForm( $form );
 		$output = $this->renderFormOpen( $form );
+
 		foreach ($form->getFields() as $field) {
+			// Prepare the object.
 			$field = $this->preRenderField( $field, $form );
-			$output.= $this->renderFieldLabel( $field );
+
+			// Start the html for this field.
+			$output.= $this->renderFieldWrapperOpen( $field );
+
+			// @todo - refactor these things to a new type of thing.
+			if ($field->getLabelPosition() === FieldInterface::POSITION_BEFORE_FIELD) {
+				$output.= $this->renderFieldLabel( $field );
+			}
+			if ($field->getDescriptionPosition() === FieldInterface::POSITION_BEFORE_FIELD) {
+				$output.= $this->renderFieldDescription( $field );
+			}
+			if ($field->getHelpPosition() === FieldInterface::POSITION_BEFORE_FIELD) {
+				$output.= $this->renderFieldHelp( $field );
+			}
+
+			// Render the field html.
 			$output.= $this->renderField( $field );
+
+			// @todo - refactor these things to a new type of thing.
+			if ($field->getLabelPosition() === FieldInterface::POSITION_AFTER_FIELD) {
+				$output.= $this->renderFieldLabel( $field );
+			}
+			if ($field->getDescriptionPosition() === FieldInterface::POSITION_AFTER_FIELD) {
+				$output.= $this->renderFieldDescription( $field );
+			}
+			if ($field->getHelpPosition() === FieldInterface::POSITION_AFTER_FIELD) {
+				$output.= $this->renderFieldHelp( $field );
+			}
+
+			// Close the field wrapper.
+			$output.= $this->renderFieldWrapperClose( $field );
 		}
+
 		$output.= $this->renderFormClose();
 		return $output;
 	}
@@ -55,10 +87,25 @@ class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function renderFieldWrapperOpen( FieldInterface $field ): string {
+		return "<div class='field-wrapper field-type--{$field->getType()} field-id--{$field->getId()}'>";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function renderFieldWrapperClose( FieldInterface $field ): string {
+		return '</div>';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function preRenderField( FieldInterface $field, FormInterface $form ) {
+		$field->setId( $this->makeFieldId( $form, $field ) );
 		$field->getAttributes()
 		    ->set( 'type', $field->getType() )
-			->set( 'id', $this->makeFieldId( $form, $field ) )
+			->set( 'id', $field->getId() )
 			->set( 'name', $form->getId() . '[' . $field->getName() . ']' )
 			->set( 'value', $field->getValue() ?? '' );
 
@@ -82,7 +129,33 @@ class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderFieldLabel( FieldInterface $field ): string {
-		return "<label for='{$field->getAttributes()->get('id')}' {$field->getLabelAttributes()->render()}>{$field->getLabel()}</label>";
+		if ( empty( $field->getLabel() ) ) {
+			return '';
+		}
+
+		return "<label for='{$field->getId()}' {$field->getLabelAttributes()->render()}>{$field->getLabel()}</label>";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function renderFieldDescription( FieldInterface $field ): string {
+		if ( empty( $field->getDescription() ) ) {
+			return '';
+		}
+
+		return "<div class='description'>{$field->getDescription()}</div>";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function renderFieldHelp( FieldInterface $field ): string {
+		if ( empty( $field->getHelp() ) ) {
+			return '';
+		}
+
+		return "<div class='help'>{$field->getHelp()}</div>";
 	}
 
 	/**
@@ -92,8 +165,10 @@ class FormStyleBase implements FormStyleInterface {
 	 * @return string
 	 */
 	protected function makeFieldId( FormInterface $form, FieldInterface $field ): string {
-		$id = \sanitize_title( $form->getId() . '-' . $field->getName() );
-		return str_replace('-', '--', $id );
+		return implode( '--', array_map('sanitize_title', [
+			$form->getId(),
+			$field->getName(),
+		] ) );
 	}
 
 }
