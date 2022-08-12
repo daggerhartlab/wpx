@@ -1,8 +1,19 @@
 <?php
 
-namespace Wpx\Form;
+namespace Wpx\Form\FormStyle;
+
+use Wpx\Form\ElementInterface;
+use Wpx\Form\FieldInterface;
+use Wpx\Form\FormInterface;
 
 interface FormStyleInterface {
+
+	/**
+	 * Unique name for the form style.
+	 *
+	 * @return string
+	 */
+	public static function name(): string;
 
 	/**
 	 * Adjust the form object immediately before rendering.

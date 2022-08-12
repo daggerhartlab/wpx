@@ -2,6 +2,8 @@
 
 namespace Wpx\Form;
 
+use Wpx\Form\Collection\ElementsCollection;
+
 class FieldBase implements FieldInterface {
 
 	/**
@@ -37,22 +39,17 @@ class FieldBase implements FieldInterface {
 	/**
 	 * Create a new field.
 	 *
+	 * @param ElementInterface $element
 	 * @param string $type
 	 *   Field type.
 	 * @param string $name
 	 *   Field machine name.
 	 * @param string $label
 	 *   Field label.
-	 * @param array $attributes
-	 *   Array of field attributes.
 	 */
-	public function __construct( string $tag = 'input', string $type = 'text', string $name = '', string $label = '', array $attributes = [] ) {
+	public function __construct( ElementInterface $element, string $type = 'text', string $name = '', string $label = '' ) {
 		$this
-			->setElement(
-				( new Element() )
-					->setTag( $tag )
-					->setAttributes( new Attributes( $attributes ) )
-			)
+			->setElement( $element )
 			->setFieldDescriptors( new ElementsCollection() )
 			->setType( $type )
 			->setName( $name )

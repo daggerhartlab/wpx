@@ -2,6 +2,8 @@
 
 namespace Wpx\Form;
 
+use Wpx\Form\Collection\ElementsCollection;
+
 class Element implements ElementInterface {
 
 	/**

@@ -3,6 +3,8 @@
 namespace Wpx\Form;
 
 use DaggerhartLab\Collections\Map\MapInterface;
+use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\FormStyle\FormStyleInterface;
 
 interface FormInterface {
 
@@ -36,7 +38,7 @@ interface FormInterface {
 	 *
 	 * @return FormInterface
 	 */
-	public function setFormMethod( string $method ): FormInterface;
+	public function setMethod( string $method ): FormInterface;
 
 	/**
 	 * Form action attribute (url|uri).
@@ -92,6 +94,22 @@ interface FormInterface {
 	public function render(): string;
 
 	/**
+	 * Get all fields on the form.
+	 *
+	 * @return FieldsCollection
+	 */
+	public function getFields(): FieldsCollection;
+
+	/**
+	 * Set the entire fields map.
+	 *
+	 * @param FieldsCollection $fields
+	 *
+	 * @return FormInterface
+	 */
+	public function setFields( FieldsCollection $fields ): FormInterface;
+
+	/**
 	 * Add a field instance to the form.
 	 *
 	 * @param FieldInterface $field
@@ -99,22 +117,6 @@ interface FormInterface {
 	 * @return FormInterface
 	 */
 	public function addField(FieldInterface $field): FormInterface;
-
-	/**
-	 * Set the entire fields map.
-	 *
-	 * @param MapInterface $fields
-	 *
-	 * @return FormInterface
-	 */
-	public function setFields( MapInterface $fields ): FormInterface;
-
-	/**
-	 * Get all fields on the form.
-	 *
-	 * @return MapInterface
-	 */
-	public function getFields(): MapInterface;
 
 	/**
 	 * Get all values submitted by the form.

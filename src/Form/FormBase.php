@@ -4,7 +4,8 @@ namespace Wpx\Form;
 
 use DaggerhartLab\Collections\Map\MapInterface;
 use DaggerhartLab\Collections\Map\TraversableMap;
-use DaggerhartLab\Collections\Map\TypedMap;
+use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\FormStyle\FormStyleInterface;
 
 class FormBase implements FormInterface {
 
@@ -36,18 +37,9 @@ class FormBase implements FormInterface {
 	protected $style;
 
 	/**
-	 * @var MapInterface
+	 * @var FieldsCollection
 	 */
 	protected $fields;
-
-	/**
-	 * @param string|null $id
-	 */
-	public function __construct(string $id, array $fields = [], array $attributes = []) {
-		$this->setId( $id );
-		$this->setAttributes( new Attributes( $attributes ) );
-		$this->setFields( new TypedMap( FieldInterface::class, $fields ) );
-	}
 
 	/**
 	 * @inheritDoc
@@ -74,7 +66,7 @@ class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function setFormMethod( string $method ): FormInterface {
+	public function setMethod( string $method ): FormInterface {
 		$this->method = $method;
 
 		return $this;
@@ -131,14 +123,14 @@ class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getFields(): MapInterface {
+	public function getFields(): FieldsCollection {
 		return $this->fields;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setFields( MapInterface $fields ): FormInterface {
+	public function setFields( FieldsCollection $fields ): FormInterface {
 		$this->fields = $fields;
 		return $this;
 	}
