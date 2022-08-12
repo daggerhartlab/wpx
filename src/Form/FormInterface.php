@@ -23,7 +23,23 @@ interface FormInterface {
 	 *
 	 * @return FormInterface
 	 */
-	public function setId(string $id): FormInterface;
+	public function setId( string $id ): FormInterface;
+
+	/**
+	 * Get the form element.
+	 *
+	 * @return ElementInterface
+	 */
+	public function getElement(): ElementInterface;
+
+	/**
+	 * Set the form element.
+	 *
+	 * @param ElementInterface $element
+	 *
+	 * @return FormInterface
+	 */
+	public function setElement( ElementInterface $element ): FormInterface;
 
 	/**
 	 * Form submit method.

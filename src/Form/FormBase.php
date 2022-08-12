@@ -16,9 +16,14 @@ class FormBase implements FormInterface {
 	protected $id;
 
 	/**
+	 * @var ElementInterface
+	 */
+	protected $element;
+
+	/**
 	 * @var string
 	 */
-	protected $method = 'POST';
+	protected $method = '';
 
 	/**
 	 * Route for the form.
@@ -35,12 +40,31 @@ class FormBase implements FormInterface {
 	/**
 	 * @var FormStyleInterface
 	 */
-	protected $style;
+	protected $formStyle;
 
 	/**
 	 * @var FieldsCollection
 	 */
 	protected $fields;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getElement(): ElementInterface {
+		if (empty($this->element)) {
+			$this->element = (new Element())->setTag('form');
+		}
+
+		return $this->element;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setElement( ElementInterface $element ): FormInterface {
+		$this->element = $element;
+		return $this;
+	}
 
 	/**
 	 * @inheritDoc
@@ -54,6 +78,10 @@ class FormBase implements FormInterface {
 	 */
 	public function setId(string $id): FormInterface {
 		$this->id = $id;
+		$this->getElement()
+		     ->getAttributes()
+		     ->set('id', $id);
+
 		return $this;
 	}
 
@@ -69,6 +97,9 @@ class FormBase implements FormInterface {
 	 */
 	public function setMethod( string $method ): FormInterface {
 		$this->method = $method;
+		$this->getElement()
+		     ->getAttributes()
+		     ->set('method', $method);
 
 		return $this;
 	}
@@ -85,6 +116,9 @@ class FormBase implements FormInterface {
 	 */
 	public function setAction( string $action ): FormInterface {
 		$this->action = $action;
+		$this->getElement()
+		     ->getAttributes()
+		     ->set('action', $action);
 
 		return $this;
 	}
@@ -93,14 +127,17 @@ class FormBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getAttributes(): Attributes {
-		return $this->attributes;
+		return $this
+			->getElement()
+			->getAttributes();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setAttributes( Attributes $attributes ): FormInterface {
-		$this->attributes = $attributes;
+		$this->getElement()
+		     ->setAttributes($attributes);
 
 		return $this;
 	}
@@ -109,15 +146,14 @@ class FormBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getFormStyle(): FormStyleInterface {
-		return $this->style;
+		return $this->formStyle;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setFormStyle( FormStyleInterface $style ): FormInterface {
-		$this->style = $style;
-
+		$this->formStyle = $style;
 		return $this;
 	}
 
@@ -150,7 +186,9 @@ class FormBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function render(): string {
-		return $this->getFormStyle()->renderForm( $this );
+		return $this
+			->getFormStyle()
+			->renderForm( $this );
 	}
 
 	/**

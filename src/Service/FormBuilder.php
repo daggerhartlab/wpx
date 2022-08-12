@@ -12,6 +12,8 @@ use Wpx\Form\FormStyle\Simple;
 
 class FormBuilder {
 
+	const DEFAULT_STYLE = 'simple';
+
 	/**
 	 * @var FormStylesCollectionInterface
 	 */
@@ -23,7 +25,7 @@ class FormBuilder {
 	public function __construct() {
 		// @todo - refactor to injection
 		$this->formStyles = new FormStylesCollection( [
-			'simple' => new Simple(),
+			static::DEFAULT_STYLE => new Simple(),
 		] );
 	}
 
@@ -52,8 +54,7 @@ class FormBuilder {
 			->setId( $id )
 			->setAction( $action )
 			->setMethod( $method )
-			// @todo - registry for form styles.
-			->setFormStyle( $form_style ?? new Simple() )
+			->setFormStyle( $form_style ?? $this->formStyles->get( static::DEFAULT_STYLE ) )
 			->setAttributes( $attributes ?? new Attributes( [] ) )
 			->setFields( $fields_collection ?? new FieldsCollection( [] ) );
 	}
