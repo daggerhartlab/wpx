@@ -4,13 +4,6 @@ namespace Wpx\Form;
 
 interface FieldInterface {
 
-	/*
-	 * For relative positioning of sub-elements of a field.
-	 */
-	const POSITION_HIDDEN = 0;
-	const POSITION_BEFORE_FIELD = 1;
-	const POSITION_AFTER_FIELD = 2;
-
 	/**
 	 * Field HTML Element, if relevant.
 	 *
@@ -104,11 +97,46 @@ interface FieldInterface {
 	public function setAttributes( Attributes $attributes ): FieldInterface;
 
 	/**
-	 * Field label.
+	 * Get descriptors collection.
 	 *
-	 * @return string
+	 * @return ElementsCollection|ElementInterface[]
 	 */
-	public function getLabel(): string;
+	public function getFieldDescriptors(): ElementsCollection;
+
+	/**
+	 * Set the descriptors collection.
+	 *
+	 * @param ElementsCollection $descriptors
+	 *
+	 * @return FieldInterface
+	 */
+	public function setFieldDescriptors( ElementsCollection $descriptors ): FieldInterface;
+
+	/**
+	 * Get descriptor by name.
+	 *
+	 * @param string $name
+	 *
+	 * @return ElementInterface
+	 */
+	public function getFieldDescriptor( string $name ): ElementInterface;
+
+	/**
+	 * Set the descriptor collection.
+	 *
+	 * @param string $name
+	 * @param ElementInterface $descriptor
+	 *
+	 * @return FieldInterface
+	 */
+	public function setFieldDescriptor( string $name, ElementInterface $descriptor ): FieldInterface;
+
+	/**
+	 * Get label descriptor element.
+	 *
+	 * @return ElementInterface
+	 */
+	public function getLabel(): ElementInterface;
 
 	/**
 	 * Set the field label.
@@ -120,43 +148,11 @@ interface FieldInterface {
 	public function setLabel(string $label): FieldInterface;
 
 	/**
-	 * Get field label attributes.
+	 * Get description descriptor element.
 	 *
-	 * @return Attributes
+	 * @return ElementInterface
 	 */
-	public function getLabelAttributes(): Attributes;
-
-	/**
-	 * Set field label attributes.
-	 *
-	 * @param Attributes $attributes
-	 *
-	 * @return FieldInterface
-	 */
-	public function setLabelAttributes( Attributes $attributes ): FieldInterface;
-
-	/**
-	 * Get label relative position.
-	 *
-	 * @return int
-	 */
-	public function getLabelPosition(): int;
-
-	/**
-	 * Set label relative position.
-	 *
-	 * @param int $position
-	 *
-	 * @return FieldInterface
-	 */
-	public function setLabelPosition(int $position): FieldInterface;
-
-	/**
-	 * Get description text.
-	 *
-	 * @return string
-	 */
-	public function getDescription(): string;
+	public function getDescription(): ElementInterface;
 
 	/**
 	 * Set field description text.
@@ -168,27 +164,11 @@ interface FieldInterface {
 	public function setDescription( string $description ): FieldInterface;
 
 	/**
-	 * Get description relative position.
+	 * Get help text descriptor element.
 	 *
-	 * @return int
+	 * @return ElementInterface
 	 */
-	public function getDescriptionPosition(): int;
-
-	/**
-	 * Set description relative position.
-	 *
-	 * @param int $position
-	 *
-	 * @return FieldInterface
-	 */
-	public function setDescriptionPosition(int $position): FieldInterface;
-
-	/**
-	 * Get help text.
-	 *
-	 * @return string
-	 */
-	public function getHelp(): string;
+	public function getHelp(): ElementInterface;
 
 	/**
 	 * Set help text.
@@ -198,21 +178,5 @@ interface FieldInterface {
 	 * @return FieldInterface
 	 */
 	public function setHelp(string $help): FieldInterface;
-
-	/**
-	 * Get help text relative position.
-	 *
-	 * @return int
-	 */
-	public function getHelpPosition(): int;
-
-	/**
-	 * Set help text relative position.
-	 *
-	 * @param int $position
-	 *
-	 * @return FieldInterface
-	 */
-	public function setHelpPosition(int $position);
 
 }

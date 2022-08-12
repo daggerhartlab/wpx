@@ -76,30 +76,12 @@ interface FormStyleInterface {
 	public function renderField( FieldInterface $field ): string;
 
 	/**
-	 * Render the field label element.
-	 *
-	 * @param FieldInterface $field
-	 *
-	 * @return string
-	 */
-	public function renderFieldLabel( FieldInterface $field ): string;
-
-	/**
 	 * Render field description.
 	 *
-	 * @param FieldInterface $field
+	 * @param ElementInterface $element
 	 *
 	 * @return string
 	 */
-	public function renderFieldDescription( FieldInterface $field ): string;
-
-	/**
-	 * Render field help text.
-	 *
-	 * @param FieldInterface $field
-	 *
-	 * @return string
-	 */
-	public function renderFieldHelp( FieldInterface $field ): string;
+	public function renderElement( ElementInterface $element ): string;
 
 }

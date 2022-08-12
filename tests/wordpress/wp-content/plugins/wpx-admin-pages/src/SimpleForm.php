@@ -3,6 +3,7 @@
 namespace WpxExampleAdminPages;
 
 use Wpx\Admin\AdminPageBase;
+use Wpx\Form\ElementInterface;
 use Wpx\Form\FieldBase;
 use Wpx\Form\FieldInterface;
 use Wpx\Form\FormBase;
@@ -36,7 +37,6 @@ class SimpleForm extends AdminPageBase {
 			)
 			->addField(
 				(new FieldBase('checkbox', 'my-checkbox', 'What about checkboxes?'))
-					->setLabelPosition(FieldInterface::POSITION_AFTER_FIELD)
 			)
 			->addField(
 				(new FieldBase('submit','submit'))
@@ -44,11 +44,12 @@ class SimpleForm extends AdminPageBase {
 			)
 		;
 
-		echo $form->render();
+		$out = $form->render();
+		echo $out;
 
 		?>
 		<pre style="border: 1px solid #bbb; padding: 6px;"><?= htmlentities(
-			str_replace("><", ">\n<", $form->render())
+			str_replace("><", ">\n<", $out)
 		) ?></pre>
 		<?php
 	}

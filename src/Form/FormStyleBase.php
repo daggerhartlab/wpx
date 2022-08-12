@@ -37,29 +37,21 @@ class FormStyleBase implements FormStyleInterface {
 			// Start the html for this field.
 			$output.= $this->renderFieldWrapperOpen( $field );
 
-			// @todo - refactor these things to a new type of thing.
-			if ($field->getLabelPosition() === FieldInterface::POSITION_BEFORE_FIELD) {
-				$output.= $this->renderFieldLabel( $field );
-			}
-			if ($field->getDescriptionPosition() === FieldInterface::POSITION_BEFORE_FIELD) {
-				$output.= $this->renderFieldDescription( $field );
-			}
-			if ($field->getHelpPosition() === FieldInterface::POSITION_BEFORE_FIELD) {
-				$output.= $this->renderFieldHelp( $field );
+			// Before the field.
+			foreach ( $field->getFieldDescriptors() as $element ) {
+				if ( $element->getPosition() === ElementInterface::POSITION_BEFORE_FIELD ) {
+					$output.= $this->renderElement( $element );
+				}
 			}
 
 			// Render the field html.
 			$output.= $this->renderField( $field );
 
-			// @todo - refactor these things to a new type of thing.
-			if ($field->getLabelPosition() === FieldInterface::POSITION_AFTER_FIELD) {
-				$output.= $this->renderFieldLabel( $field );
-			}
-			if ($field->getDescriptionPosition() === FieldInterface::POSITION_AFTER_FIELD) {
-				$output.= $this->renderFieldDescription( $field );
-			}
-			if ($field->getHelpPosition() === FieldInterface::POSITION_AFTER_FIELD) {
-				$output.= $this->renderFieldHelp( $field );
+			// After the field.
+			foreach ( $field->getFieldDescriptors() as $element ) {
+				if ( $element->getPosition() === ElementInterface::POSITION_AFTER_FIELD ) {
+					$output.= $this->renderElement( $element );
+				}
 			}
 
 			// Close the field wrapper.
@@ -111,10 +103,25 @@ class FormStyleBase implements FormStyleInterface {
 
 		$field = \apply_filters( 'wpx.form/pre_render_field', $field );
 		$field = \apply_filters( "wpx.form/pre_render_field/type={$field->getType()}", $field );
+		/** @var FieldInterface $field */
 		$field = \apply_filters( "wpx.form/pre_render_field/name={$field->getName()}", $field );
 		$field->setAttributes( new Attributes( $field->getAttributes()->filter()->all() ) );
-		$field->setLabelAttributes( new Attributes( $field->getLabelAttributes()->filter()->all() ) );
 
+		// Prepare the descriptors.
+		$field->getLabel()
+			->setTag('label')
+			->getAttributes()
+				->set('for', $this->makeFieldId( $form, $field ) );
+
+		// Hide empty descriptors.
+		foreach ( $field->getFieldDescriptors() as $element ) {
+			if ( empty( $element->getContent() ) ) {
+				$element->setPosition( ElementInterface::POSITION_HIDDEN );
+			}
+		}
+
+		// Sort descriptors.
+		$field->setFieldDescriptors( $field->getFieldDescriptors()->sortedByOrder() );
 		return $field;
 	}
 
@@ -128,34 +135,12 @@ class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function renderFieldLabel( FieldInterface $field ): string {
-		if ( empty( $field->getLabel() ) ) {
+	public function renderElement( ElementInterface $element ): string {
+		if ( empty( $element->getContent() ) ) {
 			return '';
 		}
 
-		return "<label for='{$field->getId()}' {$field->getLabelAttributes()->render()}>{$field->getLabel()}</label>";
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function renderFieldDescription( FieldInterface $field ): string {
-		if ( empty( $field->getDescription() ) ) {
-			return '';
-		}
-
-		return "<div class='description'>{$field->getDescription()}</div>";
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function renderFieldHelp( FieldInterface $field ): string {
-		if ( empty( $field->getHelp() ) ) {
-			return '';
-		}
-
-		return "<div class='help'>{$field->getHelp()}</div>";
+		return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
 	}
 
 	/**

@@ -17,11 +17,6 @@ class FieldBase implements FieldInterface {
 	/**
 	 * @var string
 	 */
-	protected $label = '';
-
-	/**
-	 * @var string
-	 */
 	protected $type;
 
 	/**
@@ -40,34 +35,9 @@ class FieldBase implements FieldInterface {
 	protected $attributes;
 
 	/**
-	 * @var Attributes
+	 * @var ElementsCollection
 	 */
-	protected $labelAttributes;
-
-	/**
-	 * @var int
-	 */
-	protected $labelPosition = FieldInterface::POSITION_BEFORE_FIELD;
-
-	/**
-	 * @var string
-	 */
-	protected $description = '';
-
-	/**
-	 * @var int
-	 */
-	protected $descriptionPosition = FieldInterface::POSITION_BEFORE_FIELD;
-
-	/**
-	 * @var string
-	 */
-	protected $help = '';
-
-	/**
-	 * @var int
-	 */
-	protected $helpPosition = FieldInterface::POSITION_AFTER_FIELD;
+	protected $fieldDescriptors;
 
 	/**
 	 * Create a new field.
@@ -83,11 +53,11 @@ class FieldBase implements FieldInterface {
 	 */
 	public function __construct( string $type = 'text', string $name = '', string $label = '', array $attributes = [] ) {
 		$this
+			->setFieldDescriptors( new ElementsCollection() )
 			->setType( $type )
 			->setName( $name )
 			->setLabel( $label )
-			->setAttributes( new Attributes( $attributes ) )
-			->setLabelAttributes( new Attributes( [] ) );
+			->setAttributes( new Attributes( $attributes ) );
 	}
 
 	/**
@@ -184,105 +154,79 @@ class FieldBase implements FieldInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getLabel(): string {
-		return $this->label;
+	public function getFieldDescriptors(): ElementsCollection {
+		return $this->fieldDescriptors;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setLabel(string $label): FieldInterface {
-		$this->label = $label;
+	public function setFieldDescriptors( ElementsCollection $fieldDescriptors ): FieldInterface {
+		$this->fieldDescriptors = $fieldDescriptors;
 		return $this;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getLabelAttributes(): Attributes {
-		return $this->labelAttributes;
+	public function getFieldDescriptor( string $name ): ElementInterface {
+		return $this->getFieldDescriptors()->get( $name ) ??
+		       // Not found? Make an empty one and return it.
+		       $this->getFieldDescriptors()
+		            ->set( $name, new Element() )
+		            ->get( $name );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setLabelAttributes( Attributes $attributes ): FieldInterface {
-		$this->labelAttributes = $attributes;
+	public function setFieldDescriptor( string $name, ElementInterface $descriptor ): FieldInterface {
+		$this->getFieldDescriptors()->set( $name, $descriptor );
 		return $this;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getLabelPosition(): int {
-		return $this->labelPosition;
+	public function getLabel(): ElementInterface {
+		return $this->getFieldDescriptor('label');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setLabelPosition( int $position ): FieldInterface {
-		$this->labelPosition = $position;
+	public function setLabel( string $label ): FieldInterface {
+		$this->getLabel()->setContent ($label );
 		return $this;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getDescription(): string {
-		return $this->description;
+	public function getDescription(): ElementInterface {
+		return $this->getFieldDescriptor('description');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setDescription( string $description ): FieldInterface {
-		$this->description = $description;
+		$this->getDescription()->setContent( $description );
 		return $this;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getDescriptionPosition(): int {
-		return $this->descriptionPosition;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setDescriptionPosition( int $position ): FieldInterface {
-		$this->descriptionPosition = $position;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getHelp(): string {
-		return $this->help;
+	public function getHelp(): ElementInterface {
+		return $this->getFieldDescriptor('help');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setHelp( string $help ): FieldInterface {
-		$this->help = $help;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getHelpPosition(): int {
-		return $this->helpPosition;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setHelpPosition( int $position ): FieldInterface {
-		$this->helpPosition = $position;
+		$this->getHelp()->setContent( $help );
 		return $this;
 	}
 
