@@ -30,11 +30,28 @@ class FieldBase implements FieldInterface {
 	protected $attributes;
 
 	/**
+	 * @var Attributes
+	 */
+	protected $labelAttributes;
+
+	/**
 	 * @var mixed
 	 */
 	protected $value;
 
-	public function __construct() {}
+	/**
+	 * Create a new field.
+	 *
+	 * @param string $name
+	 *   Field machine name.
+	 * @param array $attributes
+	 *   Array of field attributes.
+	 */
+	public function __construct( string $name, array $attributes = [] ) {
+		$this->setName( $name );
+		$this->setAttributes( new Attributes( $attributes ) );
+		$this->setLabelAttributes( new Attributes( [] ) );
+	}
 
 	/**
 	 * @inheritDoc
@@ -44,31 +61,10 @@ class FieldBase implements FieldInterface {
 	}
 
 	/**
-	 * Set the field html element.
-	 *
-	 * @param string $element
-	 *
-	 * @return FieldInterface
+	 * @inheritDoc
 	 */
 	public function setElement(string $element): FieldInterface {
 		$this->element = $element;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getLabel(): string {
-		return $this->label;
-	}
-
-	/**
-	 * @param string $label
-	 *
-	 * @return FieldInterface
-	 */
-	public function setLabel(string $label): FieldInterface {
-		$this->label = $label;
 		return $this;
 	}
 
@@ -80,9 +76,7 @@ class FieldBase implements FieldInterface {
 	}
 
 	/**
-	 * @param string $type
-	 *
-	 * @return FieldInterface
+	 * @inheritDoc
 	 */
 	public function setType( string $type ): FieldInterface {
 		$this->type = $type;
@@ -98,9 +92,7 @@ class FieldBase implements FieldInterface {
 	}
 
 	/**
-	 * @param string $name
-	 *
-	 * @return FieldInterface
+	 * @inheritDoc
 	 */
 	public function setName( string $name ): FieldInterface {
 		$this->name = $name;
@@ -116,9 +108,7 @@ class FieldBase implements FieldInterface {
 	}
 
 	/**
-	 * @param Attributes $attributes
-	 *
-	 * @return FieldInterface
+	 * @inheritDoc
 	 */
 	public function setAttributes( Attributes $attributes ): FieldInterface {
 		$this->attributes = $attributes;
@@ -134,12 +124,40 @@ class FieldBase implements FieldInterface {
 	}
 
 	/**
-	 * @param mixed $value
-	 *
-	 * @return FieldBase
+	 * @inheritDoc
 	 */
-	public function setValue( $value ) {
+	public function setValue( $value ): FieldInterface {
 		$this->value = $value;
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getLabel(): string {
+		return $this->label;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setLabel(string $label): FieldInterface {
+		$this->label = $label;
+		return $this;
+	}
+	/**
+	 * @inheritDoc
+	 */
+	public function getLabelAttributes(): Attributes {
+		return $this->labelAttributes;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setLabelAttributes( Attributes $attributes ): FieldInterface {
+		$this->labelAttributes = $attributes;
 
 		return $this;
 	}

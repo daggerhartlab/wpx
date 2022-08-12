@@ -2,12 +2,11 @@
 
 namespace Wpx\Form;
 
-use DaggerhartLab\Collections\Map\Map;
 use DaggerhartLab\Collections\Map\MapInterface;
 use DaggerhartLab\Collections\Map\TraversableMap;
 use DaggerhartLab\Collections\Map\TypedMap;
 
-abstract class FormBase implements FormInterface {
+class FormBase implements FormInterface {
 
 	/**
 	 * @var string
@@ -41,31 +40,41 @@ abstract class FormBase implements FormInterface {
 	 */
 	protected $fields;
 
-	public function __construct() {
-		$this->setFormAttributes( new Attributes() );
-		$this->setFields( new TypedMap( FieldInterface::class ) );
+	/**
+	 * @param string|null $id
+	 */
+	public function __construct(string $id, array $fields = [], array $attributes = []) {
+		$this->setId( $id );
+		$this->setAttributes( new Attributes( $attributes ) );
+		$this->setFields( new TypedMap( FieldInterface::class, $fields ) );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getFormId(): string {
+	public function getId(): string {
 		return $this->id;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getFormMethod(): string {
+	public function setId(string $id): FormInterface {
+		$this->id = $id;
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getMethod(): string {
 		return $this->method;
 	}
 
 	/**
-	 * @param string $method
-	 *
-	 * @return FormBase
+	 * @inheritDoc
 	 */
-	public function setFormMethod( string $method ): FormBase {
+	public function setFormMethod( string $method ): FormInterface {
 		$this->method = $method;
 
 		return $this;
@@ -74,16 +83,14 @@ abstract class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getFormAction(): string {
+	public function getAction(): string {
 		return $this->action;
 	}
 
 	/**
-	 * @param string $action
-	 *
-	 * @return FormBase
+	 * @inheritDoc
 	 */
-	public function setFormAction( string $action ): FormBase {
+	public function setAction( string $action ): FormInterface {
 		$this->action = $action;
 
 		return $this;
@@ -92,16 +99,14 @@ abstract class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getFormAttributes(): Attributes {
+	public function getAttributes(): Attributes {
 		return $this->attributes;
 	}
 
 	/**
-	 * @param Attributes $attributes
-	 *
-	 * @return FormBase
+	 * @inheritDoc
 	 */
-	public function setFormAttributes( Attributes $attributes ): FormBase {
+	public function setAttributes( Attributes $attributes ): FormInterface {
 		$this->attributes = $attributes;
 
 		return $this;
@@ -115,11 +120,9 @@ abstract class FormBase implements FormInterface {
 	}
 
 	/**
-	 * @param FormStyleInterface $style
-	 *
-	 * @return FormBase
+	 * @inheritDoc
 	 */
-	public function setFormStyle( FormStyleInterface $style ): FormBase {
+	public function setFormStyle( FormStyleInterface $style ): FormInterface {
 		$this->style = $style;
 
 		return $this;
@@ -133,9 +136,7 @@ abstract class FormBase implements FormInterface {
 	}
 
 	/**
-	 * @param MapInterface $fields
-	 *
-	 * @return FormInterface
+	 * @inheritDoc
 	 */
 	public function setFields( MapInterface $fields ): FormInterface {
 		$this->fields = $fields;
@@ -163,7 +164,7 @@ abstract class FormBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getSubmittedValues(): MapInterface {
-		$values = $_REQUEST[$this->getFormId()] ?? [];
+		$values = $_REQUEST[$this->getId()] ?? [];
 		return new TraversableMap($values);
 	}
 

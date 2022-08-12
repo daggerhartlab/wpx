@@ -11,6 +11,7 @@ use WpxExampleAdminPages\AcfPageTopLevel;
 use WpxExampleAdminPages\PageChild1;
 use WpxExampleAdminPages\PageChild2;
 use WpxExampleAdminPages\PageTopLevel;
+use WpxExampleAdminPages\SimpleForm;
 
 /** @var ClassLoader $__composer_class_loader */
 global $__composer_class_loader;
@@ -30,4 +31,7 @@ add_action('admin_menu', function() {
 	$acf_top->addToMenu();
 	$acf_child = new AcfChildPage();
 	$acf_child->addToSubMenu($acf_top);
+
+	$simple_form = new SimpleForm();
+	$simple_form->addToMenu();
 });
