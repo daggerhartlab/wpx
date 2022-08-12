@@ -4,7 +4,7 @@ namespace Wpx\Form\Collection;
 
 use Wpx\Form\ElementInterface;
 
-class ElementsCollection extends SortableTypedMap {
+class ElementsCollection extends SortableTypedMap implements ElementsCollectionInterface {
 
 	/**
 	 * @return string

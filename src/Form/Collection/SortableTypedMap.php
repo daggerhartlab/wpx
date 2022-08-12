@@ -4,26 +4,26 @@ namespace Wpx\Form\Collection;
 
 use DaggerhartLab\Collections\Map\TypedMap;
 
-class SortableTypedMap extends TypedMap {
+class SortableTypedMap extends TypedMap implements SortableTypedMapInterface {
 
 	/**
-	 * @param array $items
+	 * @inheritDoc
 	 */
 	public function __construct( array $items = [] ) {
 		parent::__construct( static::interface(), $items );
 	}
 
 	/**
-	 * @return string
+	 * @inheritDoc
 	 */
 	public static function interface(): string {
 		return static::class;
 	}
 
 	/**
-	 * @return static
+	 * @inheritDoc
 	 */
-	public function sortedByOrder(): self {
+	public function sortedByOrder(): SortableTypedMapInterface {
 		$items = $this->all();
 
 		uasort( $items, function($a, $b) {

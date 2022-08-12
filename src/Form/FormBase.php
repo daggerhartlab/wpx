@@ -3,8 +3,8 @@
 namespace Wpx\Form;
 
 use DaggerhartLab\Collections\Map\MapInterface;
-use DaggerhartLab\Collections\Map\TraversableMap;
 use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\Collection\SubmittedValues;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
 class FormBase implements FormInterface {
@@ -156,8 +156,8 @@ class FormBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getSubmittedValues(): MapInterface {
-		$values = $_REQUEST[$this->getId()] ?? [];
-		return new TraversableMap($values);
+		$values = $_REQUEST[ $this->getId() ] ?? [];
+		return new SubmittedValues( $values );
 	}
 
 }

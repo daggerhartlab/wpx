@@ -6,7 +6,6 @@ use Wpx\Form\Attributes;
 use Wpx\Form\ElementInterface;
 use Wpx\Form\FieldInterface;
 use Wpx\Form\FormInterface;
-use Wpx\Form\FormStyle\FormStyleInterface;
 
 /**
  * Form style handles the rendering of the form and fields.
@@ -135,7 +134,6 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderField( FieldInterface $field ): string {
-		dump($field);
 		return "<{$field->getElement()->getTag()} {$field->getElement()->getAttributes()->render()}>";
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Wpx\Form;
 
-use Wpx\Form\Collection\ElementsCollection;
+use Wpx\Form\Collection\ElementsCollectionInterface;
 
 class Element implements ElementInterface {
 
@@ -42,7 +42,7 @@ class Element implements ElementInterface {
 	/**
 	 * Child elements.
 	 *
-	 * @var ElementsCollection
+	 * @var ElementsCollectionInterface
 	 */
 	protected $children;
 

@@ -2,7 +2,7 @@
 
 namespace Wpx\Form;
 
-use Wpx\Form\Collection\ElementsCollection;
+use Wpx\Form\Collection\ElementsCollectionInterface;
 
 interface FieldInterface {
 
@@ -85,18 +85,18 @@ interface FieldInterface {
 	/**
 	 * Get descriptors collection.
 	 *
-	 * @return ElementsCollection|ElementInterface[]
+	 * @return ElementsCollectionInterface
 	 */
-	public function getFieldDescriptors(): ElementsCollection;
+	public function getFieldDescriptors(): ElementsCollectionInterface;
 
 	/**
 	 * Set the descriptors collection.
 	 *
-	 * @param ElementsCollection $descriptors
+	 * @param ElementsCollectionInterface $descriptors
 	 *
 	 * @return FieldInterface
 	 */
-	public function setFieldDescriptors( ElementsCollection $descriptors ): FieldInterface;
+	public function setFieldDescriptors( ElementsCollectionInterface $descriptors ): FieldInterface;
 
 	/**
 	 * Get descriptor by name.

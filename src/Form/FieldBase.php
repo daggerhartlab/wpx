@@ -3,6 +3,7 @@
 namespace Wpx\Form;
 
 use Wpx\Form\Collection\ElementsCollection;
+use Wpx\Form\Collection\ElementsCollectionInterface;
 
 class FieldBase implements FieldInterface {
 
@@ -32,7 +33,7 @@ class FieldBase implements FieldInterface {
 	protected $value;
 
 	/**
-	 * @var ElementsCollection
+	 * @var ElementsCollectionInterface
 	 */
 	protected $fieldDescriptors;
 
@@ -134,14 +135,14 @@ class FieldBase implements FieldInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getFieldDescriptors(): ElementsCollection {
+	public function getFieldDescriptors(): ElementsCollectionInterface {
 		return $this->fieldDescriptors;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setFieldDescriptors( ElementsCollection $descriptors ): FieldInterface {
+	public function setFieldDescriptors( ElementsCollectionInterface $descriptors ): FieldInterface {
 		$this->fieldDescriptors = $descriptors;
 		return $this;
 	}
