@@ -2,13 +2,16 @@
 
 namespace Wpx\Service;
 
+use Symfony\Component\HttpFoundation\Request;
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\FormStylesCollection;
 use Wpx\Form\Collection\FormStylesCollectionInterface;
 use Wpx\Form\FormBase;
+use Wpx\Form\FormInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 use Wpx\Form\FormStyle\Simple;
+use Wpx\Http\RequestFactory;
 
 class FormBuilder {
 
@@ -20,6 +23,11 @@ class FormBuilder {
 	protected $formStyles;
 
 	/**
+	 * @var Request
+	 */
+	protected $request;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -27,6 +35,8 @@ class FormBuilder {
 		$this->formStyles = new FormStylesCollection( [
 			static::DEFAULT_STYLE => new Simple(),
 		] );
+		// @todo - refactor to injection
+		$this->request = RequestFactory::createFromGlobals();
 	}
 
 	/**
@@ -35,28 +45,32 @@ class FormBuilder {
 	 * @param string $id
 	 * @param string $action
 	 * @param string $method
+	 * @param FieldsCollection|null $fields_collection
 	 * @param FormStyleInterface|null $form_style
 	 * @param Attributes|null $attributes
-	 * @param FieldsCollection|null $fields_collection
+	 * @param Request|null $request
 	 *
-	 * @return FormBase
+	 * @return FormInterface
 	 */
 	public function create(
 		string $id,
 		string $action = '',
-		string $method = 'POST',
+		string $method = 'GET',
+		FieldsCollection $fields_collection = null,
 		FormStyleInterface $form_style = null,
 		Attributes $attributes = null,
-		FieldsCollection $fields_collection = null )
+		Request $request = null
+	): FormInterface
 	{
-		$form = new FormBase();
-		return $form
+		return (new FormBase())
 			->setId( $id )
 			->setAction( $action )
 			->setMethod( $method )
+			->setRequest( $request ?? $this->request )
 			->setFormStyle( $form_style ?? $this->formStyles->get( static::DEFAULT_STYLE ) )
 			->setAttributes( $attributes ?? new Attributes( [] ) )
-			->setFields( $fields_collection ?? new FieldsCollection( [] ) );
+			->setFields( $fields_collection ?? new FieldsCollection( [] ) )
+			;
 	}
 
 }

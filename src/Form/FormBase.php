@@ -2,6 +2,9 @@
 
 namespace Wpx\Form;
 
+use Symfony\Component\HttpFoundation\Request;
+use Wpx\Form\Collection\FieldsCollectionInterface;
+use Wpx\Http\RequestFactory;
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\SubmittedValues;
@@ -9,6 +12,11 @@ use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
 class FormBase implements FormInterface {
+
+	/**
+	 * @var Request
+	 */
+	protected $request;
 
 	/**
 	 * @var string
@@ -46,6 +54,26 @@ class FormBase implements FormInterface {
 	 * @var FieldsCollection
 	 */
 	protected $fields;
+
+	/**
+	 * @var SubmittedValuesInterface
+	 */
+	protected $submittedValues;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getRequest(): Request {
+		return $this->request ?? RequestFactory::createFromGlobals();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setRequest( Request $request ): FormInterface {
+		$this->request = $request;
+		return $this;
+	}
 
 	/**
 	 * @inheritDoc
@@ -160,22 +188,20 @@ class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getFields(): FieldsCollection {
+	public function getFields(): FieldsCollectionInterface {
 		return $this->fields;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setFields( FieldsCollection $fields ): FormInterface {
+	public function setFields( FieldsCollectionInterface $fields ): FormInterface {
 		$this->fields = $fields;
 		return $this;
 	}
 
 	/**
-	 * @param FieldInterface $field
-	 *
-	 * @return FormInterface
+	 * @inheritDoc
 	 */
 	public function addField( FieldInterface $field ): FormInterface {
 		$this->fields->set( $field->getName(), $field );
@@ -194,9 +220,34 @@ class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function isSubmitted(): bool {
+		return (
+			$this->getRequest()->isMethod( $this->method ) &&
+			$this->getSubmittedValues()
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function getSubmittedValues(): SubmittedValuesInterface {
-		$values = $_REQUEST[ $this->getId() ] ?? [];
-		return new SubmittedValues( $values );
+		if ( !empty( $this->submittedValues ) ) {
+			return $this->submittedValues;
+		}
+
+		switch ($this->getRequest()->getMethod()) {
+			case 'get':
+				$values = $this->getRequest()->query->all()[ $this->getId() ] ?? [];
+				break;
+
+			case 'post':
+			default:
+				$values = $this->getRequest()->request->all()[ $this->getId() ] ?? [];
+				break;
+		}
+
+		$this->submittedValues = new SubmittedValues( $values );
+		return $this->submittedValues;
 	}
 
 }

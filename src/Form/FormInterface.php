@@ -2,12 +2,25 @@
 
 namespace Wpx\Form;
 
+use Symfony\Component\HttpFoundation\Request;
 use Wpx\Form\Collection\Attributes;
-use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\Collection\FieldsCollectionInterface;
 use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
 interface FormInterface {
+
+	/**
+	 * @return Request
+	 */
+	public function getRequest(): Request;
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return FormInterface
+	 */
+	public function setRequest( Request $request ): FormInterface;
 
 	/**
 	 * Unique form id.
@@ -113,18 +126,18 @@ interface FormInterface {
 	/**
 	 * Get all fields on the form.
 	 *
-	 * @return FieldsCollection
+	 * @return FieldsCollectionInterface
 	 */
-	public function getFields(): FieldsCollection;
+	public function getFields(): FieldsCollectionInterface;
 
 	/**
 	 * Set the entire fields map.
 	 *
-	 * @param FieldsCollection $fields
+	 * @param FieldsCollectionInterface $fields
 	 *
 	 * @return FormInterface
 	 */
-	public function setFields( FieldsCollection $fields ): FormInterface;
+	public function setFields( FieldsCollectionInterface $fields ): FormInterface;
 
 	/**
 	 * Add a field instance to the form.
@@ -134,6 +147,13 @@ interface FormInterface {
 	 * @return FormInterface
 	 */
 	public function addField(FieldInterface $field): FormInterface;
+
+	/**
+	 * Whether the form has been submitted.
+	 *
+	 * @return bool
+	 */
+	public function isSubmitted(): bool;
 
 	/**
 	 * Get all values submitted by the form.
