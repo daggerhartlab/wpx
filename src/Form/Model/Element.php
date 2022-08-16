@@ -4,7 +4,6 @@ namespace Wpx\Form\Model;
 
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\AttributesInterface;
-use Wpx\Form\Collection\ElementsCollectionInterface;
 
 class Element implements ElementInterface {
 
@@ -119,6 +118,17 @@ class Element implements ElementInterface {
 	public function setPosition( int $position ): ElementInterface {
 		$this->position = $position;
 		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function isEmpty(): bool {
+		return (bool) array_filter([
+			$this->getContent(),
+			is_null( $this->getAttributes()->get('value') ),
+			is_null( $this->getAttributes()->get('type') )
+		]);
 	}
 
 	/**

@@ -76,6 +76,11 @@ interface ElementInterface {
 	public function setPosition( int $position ): ElementInterface;
 
 	/**
+	 * @return bool
+	 */
+	public function isEmpty(): bool;
+
+	/**
 	 * @return string
 	 */
 	public function getContent(): string;

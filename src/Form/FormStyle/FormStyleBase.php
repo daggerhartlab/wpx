@@ -24,20 +24,13 @@ abstract class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function renderFieldWrapperTemplate(
-		FieldInterface $field,
-		string $field_html,
-		string $label,
-		string $description,
-		string $help,
-		string $before_field,
-		string $after_field
-	): string {
+	public function renderFieldWrapperTemplate( FieldInterface $field, string $field_html, array $descriptors = [] ): string {
+		dump($descriptors);
 		return "
 		<div class='field-wrapper field-type--{$field->getType()} field-id--{$field->getId()}'>
-			{$before_field}
+			{$descriptors['before_field']}
 			{$field_html}
-			{$after_field}
+			{$descriptors['after_field']}
 		</div>";
 	}
 
@@ -45,7 +38,13 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderFieldTemplate( FieldInterface $field ): string {
-		return "<{$field->getElement()->getTag()} {$field->getElement()->getAttributes()->render()}>";
+		$element = $field->getElement();
+		// Tags that need closing should have content.
+		if ( $element->getContent() ) {
+			return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
+		}
+
+		return "<{$element->getTag()} {$element->getAttributes()->render()}>";
 	}
 
 	/**
@@ -74,11 +73,16 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderElement( ElementInterface $element ): string {
-		if ( empty( $element->getContent() ) ) {
+		if ( $element->isEmpty() ) {
 			return '';
 		}
 
-		return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
+		// Tags that need closing should have content.
+		if ( $element->getContent() ) {
+			return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
+		}
+
+		return "<{$element->getTag()} {$element->getAttributes()->render()}>";
 	}
 
 }

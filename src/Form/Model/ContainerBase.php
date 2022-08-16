@@ -201,7 +201,7 @@ class ContainerBase implements ContainerInterface {
 	 * @inheritDoc
 	 */
 	public function setLabel( string $label ) {
-		$this->getLabel()->setContent ($label );
+		$this->getLabel()->setContent( $label );
 		return $this;
 	}
 

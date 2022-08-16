@@ -26,23 +26,12 @@ interface FormStyleInterface {
 	/**
 	 * @param FieldInterface $field
 	 * @param string $field_html
-	 * @param string $label
-	 * @param string $description
-	 * @param string $help
-	 * @param string $before_field
-	 * @param string $after_field
+	 * @param array $descriptors
+	 *   Known: label, description, help, before_field, after_field.
 	 *
 	 * @return string
 	 */
-	public function renderFieldWrapperTemplate(
-		FieldInterface $field,
-		string $field_html,
-		string $label,
-		string $description,
-		string $help,
-		string $before_field,
-		string $after_field
-	): string;
+	public function renderFieldWrapperTemplate( FieldInterface $field, string $field_html, array $descriptors ): string;
 
 	/**
 	 * Render the field object.

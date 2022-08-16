@@ -70,26 +70,24 @@ class Renderer implements RendererInterface {
 			// Everything before the field.
 			foreach ( $field->getDescriptors() as $element ) {
 				if ( $element->getPosition() === ElementInterface::POSITION_BEFORE_FIELD ) {
-					$before_field.= $style->renderElement( $element );
+					$before_field .= $style->renderElement( $element );
 				}
 			}
 
 			// Everything after the field.
 			foreach ( $field->getDescriptors() as $element ) {
 				if ( $element->getPosition() === ElementInterface::POSITION_AFTER_FIELD ) {
-					$after_field.= $this->renderElement( $element );
+					$after_field .= $this->renderElement( $element );
 				}
 			}
 
-			$form_html.= $style->renderFieldWrapperTemplate(
-				$field,
-				$field_html,
-				$label,
-				$description,
-				$help,
-				$before_field,
-				$after_field
-			);
+			$form_html .= $style->renderFieldWrapperTemplate( $field, $field_html, [
+				'label' => $label,
+				'description' => $description,
+				'help' => $help,
+				'before_field' => $before_field,
+				'after_field' => $after_field,
+			] );
 		}
 
 		return $style->renderFormTemplate( $form, $form_html );
