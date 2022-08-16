@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Model;
 
-class FieldBase extends ControlBase implements FieldInterface {
+abstract class FieldBase extends ControlBase implements FieldInterface {
 
 	/**
 	 * @var mixed
@@ -13,6 +13,17 @@ class FieldBase extends ControlBase implements FieldInterface {
 	 * @var bool
 	 */
 	protected $required = false;
+
+	/**
+	 * @param ElementInterface $element
+	 * @param string $name
+	 * @param string $label
+	 */
+	public function __construct( ElementInterface $element, string $name = '', string $label = '' ) {
+		$element->setTag( $this->getDefaultElementTag() );
+
+		parent::__construct( $element, $name, $label );
+	}
 
 	/**
 	 * @inheritDoc

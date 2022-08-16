@@ -5,7 +5,8 @@ namespace WpxExampleAdminPages;
 use Wpx\Admin\AdminPageBase;
 use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Model\Element;
-use Wpx\Form\Model\FieldBase;
+use Wpx\Form\Model\Field\Input;
+use Wpx\Form\Model\Field\Textarea;
 use Wpx\Form\FormStyle\Simple;
 use Wpx\Form\Service\EventsRegistry;
 use Wpx\Form\Service\Factory;
@@ -58,10 +59,10 @@ class SimpleForm extends AdminPageBase {
 				$this->actionPath('simple-form'),
 				'POST',
 				new FieldsCollection([
-						new FieldBase( (new Element())->setTag('input')->setAttribute('type', 'text'), 'testing123', 'Test Field'),
-						new FieldBase( (new Element())->setTag('input')->setAttribute('type', 'checkbox'), 'my-checkbox', 'What about checkboxes?'),
-						(new FieldBase( (new Element())->setTag('input')->setAttribute('type', 'submit'),'submit'))
-								->setValue('Save')
+					(new Input(new Element('', ['type' => 'text']), 'testing123', 'Test Field')),
+					(new Input(new Element('', ['type' => 'checkbox']), 'my-checkbox', 'What about checkboxes?')),
+					(new Textarea(new Element(), 'my-textarea', 'Message')),
+					(new Input(new Element('', ['type' => 'submit']), 'testing123'))->setValue('Save'),
 				]),
 				new Simple(),
 				null,

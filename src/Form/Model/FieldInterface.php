@@ -5,6 +5,11 @@ namespace Wpx\Form\Model;
 interface FieldInterface extends ControlInterface {
 
 	/**
+	 * @return string
+	 */
+	public static function getDefaultElementTag(): string;
+
+	/**
 	 * Field value.
 	 *
 	 * @return mixed
