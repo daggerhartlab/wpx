@@ -1,8 +1,8 @@
 <?php
 
-namespace Wpx\Form;
+namespace Wpx\Form\Model;
 
-use Wpx\Form\Collection\Attributes;
+use Wpx\Form\Collection\AttributesInterface;
 
 interface ElementInterface {
 
@@ -21,11 +21,11 @@ interface ElementInterface {
 	public function getTag(): string;
 
 	/**
-	 * @param string $element
+	 * @param string $tag
 	 *
 	 * @return ElementInterface
 	 */
-	public function setTag( string $element ): ElementInterface;
+	public function setTag( string $tag ): ElementInterface;
 
 	/**
 	 * Get element order.
@@ -44,16 +44,24 @@ interface ElementInterface {
 	public function setOrder( int $order ): ElementInterface;
 
 	/**
-	 * @return Attributes
+	 * @return AttributesInterface
 	 */
-	public function getAttributes(): Attributes;
+	public function getAttributes(): AttributesInterface;
 
 	/**
-	 * @param Attributes $attributes
+	 * @param AttributesInterface $attributes
 	 *
 	 * @return ElementInterface
 	 */
-	public function setAttributes( Attributes $attributes ): ElementInterface;
+	public function setAttributes( AttributesInterface $attributes ): ElementInterface;
+
+	/**
+	 * @param string $name
+	 * @param string|array $value
+	 *
+	 * @return ElementInterface
+	 */
+	public function setAttribute( string $name, $value ): ElementInterface;
 
 	/**
 	 * @return int

@@ -4,10 +4,12 @@ namespace WpxExampleAdminPages;
 
 use Wpx\Admin\AdminPageBase;
 use Wpx\Form\Collection\FieldsCollection;
-use Wpx\Form\Element;
-use Wpx\Form\FieldBase;
+use Wpx\Form\Model\Element;
+use Wpx\Form\Model\FieldBase;
 use Wpx\Form\FormStyle\Simple;
-use Wpx\Service\FormBuilder;
+use Wpx\Form\Service\EventsRegistry;
+use Wpx\Form\Service\Factory;
+use Wpx\Form\Service\Renderer;
 
 class SimpleForm extends AdminPageBase {
 
@@ -36,7 +38,8 @@ class SimpleForm extends AdminPageBase {
 	 */
 	public function content() {
 		$form = $this->mkform();
-		$out = $form->render();
+		$renderer = new Renderer(new EventsRegistry());
+		$out = $renderer->renderForm($form);
 		echo $out;
 
 		?>
@@ -48,16 +51,16 @@ class SimpleForm extends AdminPageBase {
 	}
 
 	public function mkform() {
-		$builder = new FormBuilder();
+		$builder = new Factory();
 		return $builder
-			->create(
+			->createForm(
 				'whatwhat',
 				$this->actionPath('simple-form'),
 				'POST',
 				new FieldsCollection([
-						new FieldBase( (new Element())->setTag('input'), 'text', 'testing123', 'Test Field'),
-						new FieldBase( (new Element())->setTag('input'), 'checkbox', 'my-checkbox', 'What about checkboxes?'),
-						(new FieldBase( (new Element())->setTag('input'), 'submit','submit'))
+						new FieldBase( (new Element())->setTag('input')->setAttribute('type', 'text'), 'testing123', 'Test Field'),
+						new FieldBase( (new Element())->setTag('input')->setAttribute('type', 'checkbox'), 'my-checkbox', 'What about checkboxes?'),
+						(new FieldBase( (new Element())->setTag('input')->setAttribute('type', 'submit'),'submit'))
 								->setValue('Save')
 				]),
 				new Simple(),

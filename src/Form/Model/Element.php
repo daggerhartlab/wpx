@@ -1,8 +1,9 @@
 <?php
 
-namespace Wpx\Form;
+namespace Wpx\Form\Model;
 
 use Wpx\Form\Collection\Attributes;
+use Wpx\Form\Collection\AttributesInterface;
 use Wpx\Form\Collection\ElementsCollectionInterface;
 
 class Element implements ElementInterface {
@@ -12,7 +13,7 @@ class Element implements ElementInterface {
 	 *
 	 * @var string
 	 */
-	protected $element = 'div';
+	protected $tag = 'div';
 
 	/**
 	 * @var int
@@ -41,13 +42,6 @@ class Element implements ElementInterface {
 	protected $content;
 
 	/**
-	 * Child elements.
-	 *
-	 * @var ElementsCollectionInterface
-	 */
-	protected $children;
-
-	/**
 	 * @param string $content
 	 * @param array $attributes
 	 */
@@ -63,14 +57,14 @@ class Element implements ElementInterface {
 	 * @inheritDoc
 	 */
 	public function getTag(): string {
-		return $this->element;
+		return $this->tag;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setTag( string $element ): ElementInterface {
-		$this->element = $element;
+	public function setTag( string $tag ): ElementInterface {
+		$this->tag = $tag;
 		return $this;
 	}
 
@@ -92,15 +86,23 @@ class Element implements ElementInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getAttributes(): Attributes {
+	public function getAttributes(): AttributesInterface {
 		return $this->attributes;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setAttributes( Attributes $attributes ): ElementInterface {
+	public function setAttributes( AttributesInterface $attributes ): ElementInterface {
 		$this->attributes = $attributes;
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setAttribute( string $name, $value ): ElementInterface {
+		$this->getAttributes()->set($name, $value);
 		return $this;
 	}
 

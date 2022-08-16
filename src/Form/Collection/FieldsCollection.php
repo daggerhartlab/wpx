@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Collection;
 
-use Wpx\Form\FieldInterface;
+use Wpx\Form\Model\FieldInterface;
 
 class FieldsCollection extends SortableTypedMap implements FieldsCollectionInterface {
 

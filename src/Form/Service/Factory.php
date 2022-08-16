@@ -1,19 +1,20 @@
 <?php
 
-namespace Wpx\Service;
+namespace Wpx\Form\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\FormStylesCollection;
 use Wpx\Form\Collection\FormStylesCollectionInterface;
-use Wpx\Form\FormBase;
-use Wpx\Form\FormInterface;
+use Wpx\Form\Model\Element;
+use Wpx\Form\Model\FormBase;
+use Wpx\Form\Model\FormInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 use Wpx\Form\FormStyle\Simple;
 use Wpx\Http\RequestFactory;
 
-class FormBuilder {
+class Factory {
 
 	const DEFAULT_STYLE = 'simple';
 
@@ -52,7 +53,7 @@ class FormBuilder {
 	 *
 	 * @return FormInterface
 	 */
-	public function create(
+	public function createForm(
 		string $id,
 		string $action = '',
 		string $method = 'GET',
@@ -62,14 +63,14 @@ class FormBuilder {
 		Request $request = null
 	): FormInterface
 	{
-		return (new FormBase())
+		return ( new FormBase( new Element() ) )
 			->setId( $id )
 			->setAction( $action )
 			->setMethod( $method )
 			->setRequest( $request ?? $this->request )
 			->setFormStyle( $form_style ?? $this->formStyles->get( static::DEFAULT_STYLE ) )
 			->setAttributes( $attributes ?? new Attributes( [] ) )
-			->setFields( $fields_collection ?? new FieldsCollection( [] ) )
+			->setChildren( $fields_collection ?? new FieldsCollection( [] ) )
 			;
 	}
 

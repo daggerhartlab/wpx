@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Collection;
 
-use Wpx\Form\ElementInterface;
+use Wpx\Form\Model\ElementInterface;
 
 class ElementsCollection extends SortableTypedMap implements ElementsCollectionInterface {
 

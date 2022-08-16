@@ -2,9 +2,9 @@
 
 namespace Wpx\Form\FormStyle;
 
-use Wpx\Form\ElementInterface;
-use Wpx\Form\FieldInterface;
-use Wpx\Form\FormInterface;
+use Wpx\Form\Model\ElementInterface;
+use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FormInterface;
 
 interface FormStyleInterface {
 
@@ -16,66 +16,33 @@ interface FormStyleInterface {
 	public static function name(): string;
 
 	/**
-	 * Adjust the form object immediately before rendering.
-	 *
 	 * @param FormInterface $form
-	 *
-	 * @return FormInterface
-	 */
-	public function preRenderForm( FormInterface $form ): FormInterface;
-
-	/**
-	 * Render an entire form.
-	 *
-	 * @param FormInterface $form
+	 * @param string $inner_html
 	 *
 	 * @return string
 	 */
-	public function renderForm( FormInterface $form ): string;
+	public function renderFormTemplate( FormInterface $form, string $inner_html ): string;
 
 	/**
-	 * Open the form element.
-	 *
-	 * @param FormInterface $form
-	 *
-	 * @return string
-	 */
-	public function renderFormOpen( FormInterface $form ): string;
-
-	/**
-	 * Close the form element.
-	 *
-	 * @return string
-	 */
-	public function renderFormClose(): string;
-
-	/**
-	 * Open field wrapper element.
-	 *
 	 * @param FieldInterface $field
+	 * @param string $field_html
+	 * @param string $label
+	 * @param string $description
+	 * @param string $help
+	 * @param string $before_field
+	 * @param string $after_field
 	 *
 	 * @return string
 	 */
-	public function renderFieldWrapperOpen( FieldInterface $field ): string;
-
-	/**
-	 * Close field wrapper element.
-	 *
-	 * @param FieldInterface $field
-	 *
-	 * @return string
-	 */
-	public function renderFieldWrapperClose( FieldInterface $field ): string;
-
-	/**
-	 * Adjust the field object immediately before rendering.
-	 *
-	 * @param FieldInterface $field
-	 * @param FormInterface $form
-	 *
-	 * @return mixed
-	 */
-	public function preRenderField( FieldInterface $field, FormInterface $form );
+	public function renderFieldWrapperTemplate(
+		FieldInterface $field,
+		string $field_html,
+		string $label,
+		string $description,
+		string $help,
+		string $before_field,
+		string $after_field
+	): string;
 
 	/**
 	 * Render the field object.
@@ -84,7 +51,31 @@ interface FormStyleInterface {
 	 *
 	 * @return string
 	 */
-	public function renderField( FieldInterface $field ): string;
+	public function renderFieldTemplate( FieldInterface $field ): string;
+
+	/**
+	 * @param FieldInterface $field
+	 * @param ElementInterface $element
+	 *
+	 * @return string
+	 */
+	public function renderFieldLabelTemplate( FieldInterface $field, ElementInterface $element ): string;
+
+	/**
+	 * @param FieldInterface $field
+	 * @param ElementInterface $element
+	 *
+	 * @return string
+	 */
+	public function renderFieldDescriptionTemplate( FieldInterface $field, ElementInterface $element ): string;
+
+	/**
+	 * @param FieldInterface $field
+	 * @param ElementInterface $element
+	 *
+	 * @return string
+	 */
+	public function renderFieldHelpTextTemplate( FieldInterface $field, ElementInterface $element ): string;
 
 	/**
 	 * Render field description.

@@ -1,32 +1,19 @@
 <?php
 
-namespace Wpx\Form;
+namespace Wpx\Form\Model;
 
 use Symfony\Component\HttpFoundation\Request;
-use Wpx\Form\Collection\FieldsCollectionInterface;
 use Wpx\Http\RequestFactory;
-use Wpx\Form\Collection\Attributes;
-use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\SubmittedValues;
 use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
-class FormBase implements FormInterface {
+class FormBase extends ContainerBase implements FormInterface {
 
 	/**
 	 * @var Request
 	 */
 	protected $request;
-
-	/**
-	 * @var string
-	 */
-	protected $id;
-
-	/**
-	 * @var ElementInterface
-	 */
-	protected $element;
 
 	/**
 	 * @var string
@@ -41,19 +28,9 @@ class FormBase implements FormInterface {
 	protected $action = '';
 
 	/**
-	 * @var Attributes
-	 */
-	protected $attributes;
-
-	/**
 	 * @var FormStyleInterface
 	 */
 	protected $formStyle;
-
-	/**
-	 * @var FieldsCollection
-	 */
-	protected $fields;
 
 	/**
 	 * @var SubmittedValuesInterface
@@ -72,44 +49,6 @@ class FormBase implements FormInterface {
 	 */
 	public function setRequest( Request $request ): FormInterface {
 		$this->request = $request;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getElement(): ElementInterface {
-		if (empty($this->element)) {
-			$this->element = (new Element())->setTag('form');
-		}
-
-		return $this->element;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setElement( ElementInterface $element ): FormInterface {
-		$this->element = $element;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getId(): string {
-		return $this->id;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setId(string $id): FormInterface {
-		$this->id = $id;
-		$this->getElement()
-		     ->getAttributes()
-		     ->set('id', $id);
-
 		return $this;
 	}
 
@@ -154,25 +93,6 @@ class FormBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getAttributes(): Attributes {
-		return $this
-			->getElement()
-			->getAttributes();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setAttributes( Attributes $attributes ): FormInterface {
-		$this->getElement()
-		     ->setAttributes($attributes);
-
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function getFormStyle(): FormStyleInterface {
 		return $this->formStyle;
 	}
@@ -183,38 +103,6 @@ class FormBase implements FormInterface {
 	public function setFormStyle( FormStyleInterface $style ): FormInterface {
 		$this->formStyle = $style;
 		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getFields(): FieldsCollectionInterface {
-		return $this->fields;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setFields( FieldsCollectionInterface $fields ): FormInterface {
-		$this->fields = $fields;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function addField( FieldInterface $field ): FormInterface {
-		$this->fields->set( $field->getName(), $field );
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function render(): string {
-		return $this
-			->getFormStyle()
-			->renderForm( $this );
 	}
 
 	/**
