@@ -61,8 +61,7 @@ class Renderer implements RendererInterface {
 		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_FORM );
 		$form->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FORM );
 
-		$html = $this->renderControl( $form, $form );
-		return $form->getFormStyle()->renderFormTemplate( $form, $html );
+		return $this->renderControl( $form, $form );
 	}
 
 	/**
@@ -75,7 +74,11 @@ class Renderer implements RendererInterface {
 
 		$style = $form->getFormStyle();
 		$html = '';
-		/** @var ControlInterface $child */
+
+		/**
+		 * @var ControlInterface $child
+		 * @var ElementInterface $element
+		 */
 		foreach ($control->getChildren() as $child) {
 			// Render the field and descriptors to html.
 			$field_html = $this->renderField( $child, $form );
@@ -92,7 +95,7 @@ class Renderer implements RendererInterface {
 			// Everything before the field.
 			$before_field = '';
 			foreach ( $child->getDescriptors() as $element ) {
-				if ( $element->getPosition() === ElementInterface::POSITION_BEFORE_FIELD ) {
+				if ( !$element->isEmpty() && $element->getPosition() === ElementInterface::POSITION_BEFORE_FIELD ) {
 					$before_field .= $style->renderElementTemplate( $element );
 				}
 			}
@@ -100,19 +103,24 @@ class Renderer implements RendererInterface {
 			// Everything after the field.
 			$after_field = '';
 			foreach ( $child->getDescriptors() as $element ) {
-				if ( $element->getPosition() === ElementInterface::POSITION_AFTER_FIELD ) {
+				if ( !$element->isEmpty() &&  $element->getPosition() === ElementInterface::POSITION_AFTER_FIELD ) {
 					$after_field .= $this->renderElement( $element, $form );
 				}
 			}
 
-			$html .= $style->renderFieldWrapperTemplate( $child, $field_html, [
-				'label' => $label,
-				'description' => $description,
-				'help' => $help,
-				'before_field' => $before_field,
-				'after_field' => $after_field,
-				'children_html' => $children_html,
-			] );
+			if ( $child instanceof FieldInterface ) {
+				$html .= $style->renderFieldWrapperTemplate( $child, $field_html, [
+					'label' => $label,
+					'description' => $description,
+					'help' => $help,
+					'before_field' => $before_field,
+					'after_field' => $after_field,
+					'children_html' => $children_html,
+				] );
+			}
+			elseif ( $child instanceof ControlInterface ) {
+				$html .= $style->renderControlTemplate( $child, $children_html );
+			}
 		}
 
 		return $style->renderControlTemplate( $control, $html );
@@ -143,6 +151,7 @@ class Renderer implements RendererInterface {
 	 */
 	public function onPreRenderForm( FormEvent $event ): void {
 		$form = $event->getForm();
+		$form->getElement()->setTag( 'form' );
 		$form->getAttributes()
 		     ->set( 'id', $form->getId() )
 		     ->set( 'method', $form->getMethod() )

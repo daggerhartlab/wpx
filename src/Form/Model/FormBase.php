@@ -55,6 +55,14 @@ class FormBase extends ControlBase implements FormInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function setElement( ElementInterface $element ) {
+		$element->setTag('form');
+		return parent::setElement( $element );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function getMethod(): string {
 		return $this->getAttributes()->get('method', $this->defaultMethod);
 	}
@@ -108,7 +116,7 @@ class FormBase extends ControlBase implements FormInterface {
 	 */
 	public function isSubmitted(): bool {
 		return (
-			$this->getRequest()->isMethod( $this->method ) &&
+			$this->getRequest()->isMethod( $this->getMethod() ) &&
 			$this->getSubmittedValues()
 		);
 	}

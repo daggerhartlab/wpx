@@ -16,10 +16,8 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderFormTemplate( FormInterface $form, string $inner_html ): string {
-		return "
-		<form {$form->getAttributes()->render()}>
-			{$inner_html}
-		</form>";
+		$form->getElement()->setContent( $inner_html );
+		return $this->renderElementTemplate( $form->getElement() );
 	}
 
 	/**
@@ -59,11 +57,6 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 * @inheritDoc
 	 */
 	public function renderElementTemplate( ElementInterface $element ): string {
-		// If this is a tag that expects content but is empty, render nothing.
-		if ( $element->isEmpty() && !$element->isVoidElement() ) {
-			return '';
-		}
-
 		if ( $element->isVoidElement() ) {
 			return "<{$element->getTag()} {$element->getAttributes()->render()}>";
 		}
