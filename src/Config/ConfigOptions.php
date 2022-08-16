@@ -78,7 +78,7 @@ class ConfigOptions extends TraversableMap implements ConfigInterface {
 	 * @inheritDoc
 	 */
 	public function save(): bool {
-		return \update_option( $this->optionName, $this->data, $this->autoload );
+		return \update_option( $this->optionName, $this->all(), $this->autoload );
 	}
 
 }
