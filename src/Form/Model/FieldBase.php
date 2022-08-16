@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Model;
 
-class FieldBase extends ContainerBase implements FieldInterface {
+class FieldBase extends ControlBase implements FieldInterface {
 
 	/**
 	 * @var mixed

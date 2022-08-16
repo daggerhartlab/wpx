@@ -7,7 +7,7 @@ use Wpx\Form\Collection\FieldsCollectionInterface;
 use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
-interface FormInterface extends ContainerInterface {
+interface FormInterface extends ControlInterface {
 
 	/**
 	 * @return Request

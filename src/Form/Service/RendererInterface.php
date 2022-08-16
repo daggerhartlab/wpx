@@ -2,6 +2,8 @@
 
 namespace Wpx\Form\Service;
 
+use Wpx\Form\Event\ControlEvent;
+use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Event\ElementEvent;
 use Wpx\Form\Event\FieldEvent;
@@ -13,6 +15,7 @@ interface RendererInterface {
 
 	public const EVENT_PRE_RENDER_FORM = 'onPreRenderForm';
 	public const EVENT_PRE_RENDER_FIELD = 'onPreRenderField';
+	public const EVENT_PRE_RENDER_CONTROL = 'onPreRenderControl';
 	public const EVENT_PRE_RENDER_ELEMENT = 'onPreRenderElement';
 
 	/**
@@ -32,6 +35,16 @@ interface RendererInterface {
 	public function renderForm( FormInterface $form ): string;
 
 	/**
+	 * Generic control rendering includes fields, forms, and their children.
+	 *
+	 * @param ControlInterface $control
+	 * @param FormInterface $form
+	 *
+	 * @return string
+	 */
+	public function renderControl( ControlInterface $control, FormInterface $form ): string;
+
+	/**
 	 * @param FieldInterface $field
 	 * @param FormInterface $form
 	 *
@@ -41,11 +54,13 @@ interface RendererInterface {
 
 	/**
 	 * Render all
+	 *
 	 * @param ElementInterface $element
+	 * @param FormInterface $form
 	 *
 	 * @return string
 	 */
-	public function renderElement( ElementInterface $element ): string;
+	public function renderElement( ElementInterface $element, FormInterface $form ): string;
 
 	/**
 	 * Adjust the form object immediately before rendering.
@@ -55,6 +70,15 @@ interface RendererInterface {
 	 * @return void
 	 */
 	public function onPreRenderForm( FormEvent $event ): void;
+
+	/**
+	 * Adjust the control object immediately before rendering.
+	 *
+	 * @param ControlEvent $event
+	 *
+	 * @return void
+	 */
+	public function onPreRenderControl( ControlEvent $event ): void;
 
 	/**
 	 * Adjust the field object immediately before rendering.

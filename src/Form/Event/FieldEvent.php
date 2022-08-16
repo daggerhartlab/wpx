@@ -4,7 +4,7 @@ namespace Wpx\Form\Event;
 
 use Wpx\Form\Model\FieldInterface;
 
-class FieldEvent implements EventInterface {
+class FieldEvent extends ControlEvent {
 
 	/**
 	 * @var FieldInterface
@@ -16,6 +16,7 @@ class FieldEvent implements EventInterface {
 	 */
 	public function __construct( FieldInterface $field ) {
 		$this->field = $field;
+		parent::__construct( $field );
 	}
 
 	/**

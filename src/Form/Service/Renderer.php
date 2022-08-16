@@ -3,6 +3,8 @@
 namespace Wpx\Form\Service;
 
 use Wpx\Form\Collection\Attributes;
+use Wpx\Form\Event\ControlEvent;
+use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Event\ElementEvent;
 use Wpx\Form\Event\FieldEvent;
@@ -35,6 +37,9 @@ class Renderer implements RendererInterface {
 			RendererInterface::EVENT_PRE_RENDER_FIELD => [
 				[$this, 'onPreRenderField'],
 			],
+			RendererInterface::EVENT_PRE_RENDER_CONTROL => [
+				[$this, 'onPreRenderControl'],
+			],
 			RendererInterface::EVENT_PRE_RENDER_ELEMENT => [
 				[$this, 'onPreRenderElement'],
 			],
@@ -52,61 +57,85 @@ class Renderer implements RendererInterface {
 	 * @inheritDoc
 	 */
 	public function renderForm( FormInterface $form ): string {
-		$this->eventRegistry->dispatchEvent( new FormEvent( $form ), self::EVENT_PRE_RENDER_FORM );
+		$event = new FormEvent( $form );
+		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_FORM );
+		$form->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FORM );
+
+		$html = $this->renderControl( $form, $form );
+		return $form->getFormStyle()->renderFormTemplate( $form, $html );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function renderControl( ControlInterface $control, FormInterface $form ): string {
+		$event = new ControlEvent( $control );
+		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_CONTROL );
+		$control->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_CONTROL );
+
 		$style = $form->getFormStyle();
-
-		$form_html = '';
-		/** @var FieldInterface $field */
-		foreach ($form->getChildren() as $field) {
-
+		$html = '';
+		/** @var ControlInterface $child */
+		foreach ($control->getChildren() as $child) {
 			// Render the field and descriptors to html.
-			$field_html = $this->renderField( $field, $form );
-			$label = $this->renderElement( $field->getDescriptor('label') );
-			$description = $this->renderElement( $field->getDescriptor('description') );
-			$help = $this->renderElement( $field->getDescriptor('help') );
-			$before_field = '';
-			$after_field = '';
+			$field_html = $this->renderField( $child, $form );
+			$label = $this->renderElement( $child->getDescriptor('label'), $form );
+			$description = $this->renderElement( $child->getDescriptor('description'), $form );
+			$help = $this->renderElement( $child->getDescriptor('help'), $form );
+
+			// Recursive child rendering.
+			$children_html = '';
+			if ($child->hasChildren()) {
+				$children_html = $this->renderControl( $child, $form );
+			}
 
 			// Everything before the field.
-			foreach ( $field->getDescriptors() as $element ) {
+			$before_field = '';
+			foreach ( $child->getDescriptors() as $element ) {
 				if ( $element->getPosition() === ElementInterface::POSITION_BEFORE_FIELD ) {
-					$before_field .= $style->renderElement( $element );
+					$before_field .= $style->renderElementTemplate( $element );
 				}
 			}
 
 			// Everything after the field.
-			foreach ( $field->getDescriptors() as $element ) {
+			$after_field = '';
+			foreach ( $child->getDescriptors() as $element ) {
 				if ( $element->getPosition() === ElementInterface::POSITION_AFTER_FIELD ) {
-					$after_field .= $this->renderElement( $element );
+					$after_field .= $this->renderElement( $element, $form );
 				}
 			}
 
-			$form_html .= $style->renderFieldWrapperTemplate( $field, $field_html, [
+			$html .= $style->renderFieldWrapperTemplate( $child, $field_html, [
 				'label' => $label,
 				'description' => $description,
 				'help' => $help,
 				'before_field' => $before_field,
 				'after_field' => $after_field,
+				'children_html' => $children_html,
 			] );
 		}
 
-		return $style->renderFormTemplate( $form, $form_html );
+		return $style->renderControlTemplate( $control, $html );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function renderField( FieldInterface $field, FormInterface $form ): string {
-		$this->eventRegistry->dispatchEvent( new FieldEvent( $field ), self::EVENT_PRE_RENDER_FIELD );
+		$event = new FieldEvent( $field );
+		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
+		$form->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
+		$field->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
+
 		return $form->getFormStyle()->renderFieldTemplate( $field );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function renderElement( ElementInterface $element ): string {
+	public function renderElement( ElementInterface $element, FormInterface $form ): string {
 		$this->eventRegistry->dispatchEvent( new ElementEvent( $element ), self::EVENT_PRE_RENDER_ELEMENT );
-		return '';
+		return $form->getFormStyle()->renderElementTemplate( $element );
 	}
 
 	/**
@@ -125,6 +154,17 @@ class Renderer implements RendererInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function onPreRenderControl( ControlEvent $event ): void {
+		$control = $event->getControl();
+		$control->getAttributes()
+			->set( 'id', $control->getId() );
+
+		$control->setAttributes( new Attributes( $control->getAttributes()->filter()->all() ) );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function onPreRenderField( FieldEvent $event ): void {
 		$field = $event->getField();
 		$form = $field->getParent();
@@ -136,10 +176,19 @@ class Renderer implements RendererInterface {
 		$field->getElement()->setAttributes( new Attributes( $field->getElement()->getAttributes()->filter()->all() ) );
 
 		// Prepare the descriptors.
-		$field->getLabel()
-		      ->setTag( 'label' )
-		      ->getAttributes()
-		      ->set( 'for', $form->getId() );
+		$field
+			->getLabel()
+		    ->setTag( 'label' )
+		    ->getAttributes()
+		    ->set( 'for', $form->getId() );
+		$field
+			->getDescription()
+			->setTag('div')
+			->setAttribute('class', ['description']);
+		$field
+			->getHelpText()
+			->setTag('div')
+			->setAttribute('class', ['help']);
 
 		// Hide empty descriptors.
 		foreach ( $field->getDescriptors() as $element ) {

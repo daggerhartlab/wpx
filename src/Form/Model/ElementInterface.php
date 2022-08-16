@@ -13,6 +13,26 @@ interface ElementInterface {
 	public const POSITION_BEFORE_FIELD = 1;
 	public const POSITION_AFTER_FIELD = 2;
 
+	/*
+	 * AKA, self-closing tags.
+	 */
+	public const VOID_ELEMENTS = [
+	    'area',
+	    'base',
+	    'br',
+	    'col',
+	    'embed',
+	    'hr',
+	    'img',
+	    'input',
+	    'link',
+	    'meta',
+	    'param',
+	    'source',
+	    'track',
+	    'wbr',
+	];
+
 	/**
 	 * Get element.
 	 *
@@ -79,6 +99,11 @@ interface ElementInterface {
 	 * @return bool
 	 */
 	public function isEmpty(): bool;
+
+	/**
+	 * @return bool
+	 */
+	public function isVoidElement(): bool;
 
 	/**
 	 * @return string

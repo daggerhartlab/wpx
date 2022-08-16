@@ -124,11 +124,18 @@ class Element implements ElementInterface {
 	 * @inheritDoc
 	 */
 	public function isEmpty(): bool {
-		return (bool) array_filter([
-			$this->getContent(),
+		return empty( array_filter( [
+			empty( $this->getContent() ),
 			is_null( $this->getAttributes()->get('value') ),
 			is_null( $this->getAttributes()->get('type') )
-		]);
+		] ) );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function isVoidElement(): bool {
+		return in_array( strtolower( $this->getTag()) , ElementInterface::VOID_ELEMENTS );
 	}
 
 	/**

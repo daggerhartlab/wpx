@@ -2,6 +2,7 @@
 
 namespace Wpx\Form\FormStyle;
 
+use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Model\FieldInterface;
 use Wpx\Form\Model\FormInterface;
@@ -24,6 +25,14 @@ interface FormStyleInterface {
 	public function renderFormTemplate( FormInterface $form, string $inner_html ): string;
 
 	/**
+	 * @param ControlInterface $control
+	 * @param string $inner_html
+	 *
+	 * @return string
+	 */
+	public function renderControlTemplate( ControlInterface $control, string $inner_html ): string;
+
+	/**
 	 * @param FieldInterface $field
 	 * @param string $field_html
 	 * @param array $descriptors
@@ -43,36 +52,12 @@ interface FormStyleInterface {
 	public function renderFieldTemplate( FieldInterface $field ): string;
 
 	/**
-	 * @param FieldInterface $field
-	 * @param ElementInterface $element
-	 *
-	 * @return string
-	 */
-	public function renderFieldLabelTemplate( FieldInterface $field, ElementInterface $element ): string;
-
-	/**
-	 * @param FieldInterface $field
-	 * @param ElementInterface $element
-	 *
-	 * @return string
-	 */
-	public function renderFieldDescriptionTemplate( FieldInterface $field, ElementInterface $element ): string;
-
-	/**
-	 * @param FieldInterface $field
-	 * @param ElementInterface $element
-	 *
-	 * @return string
-	 */
-	public function renderFieldHelpTextTemplate( FieldInterface $field, ElementInterface $element ): string;
-
-	/**
 	 * Render field description.
 	 *
 	 * @param ElementInterface $element
 	 *
 	 * @return string
 	 */
-	public function renderElement( ElementInterface $element ): string;
+	public function renderElementTemplate( ElementInterface $element ): string;
 
 }

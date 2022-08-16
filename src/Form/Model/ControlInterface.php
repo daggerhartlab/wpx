@@ -7,7 +7,7 @@ use Wpx\Form\Collection\ElementsCollectionInterface;
 use Wpx\Form\Collection\FieldsCollectionInterface;
 use Wpx\Form\Service\EventsRegistryInterface;
 
-interface ContainerInterface {
+interface ControlInterface {
 
 	/**
 	 * Field HTML Element, if relevant.
@@ -24,18 +24,6 @@ interface ContainerInterface {
 	 * @return static
 	 */
 	public function setElement( ElementInterface $element );
-
-	/**
-	 * @return ContainerInterface
-	 */
-	public function getParent(): ContainerInterface;
-
-	/**
-	 * @param ContainerInterface $parent
-	 *
-	 * @return static
-	 */
-	public function setParent( ContainerInterface $parent );
 
 	/**
 	 * @return string
@@ -191,6 +179,23 @@ interface ContainerInterface {
 	public function setAttributes( Attributes $attributes );
 
 	/**
+	 * @return ControlInterface
+	 */
+	public function getParent(): ControlInterface;
+
+	/**
+	 * @param ControlInterface $parent
+	 *
+	 * @return static
+	 */
+	public function setParent( ControlInterface $parent );
+
+	/**
+	 * @return bool
+	 */
+	public function hasChildren(): bool;
+
+	/**
 	 * Get all fields on the form.
 	 *
 	 * @return FieldsCollectionInterface
@@ -209,9 +214,9 @@ interface ContainerInterface {
 	/**
 	 * Add a field instance to the form.
 	 *
-	 * @param ContainerInterface|FieldInterface $child
+	 * @param ControlInterface|FieldInterface $child
 	 *
 	 * @return static
 	 */
-	public function addChild( ContainerInterface $child );
+	public function addChild( ControlInterface $child );
 }

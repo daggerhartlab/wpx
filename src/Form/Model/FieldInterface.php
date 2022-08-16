@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Model;
 
-interface FieldInterface extends ContainerInterface {
+interface FieldInterface extends ControlInterface {
 
 	/**
 	 * Field value.

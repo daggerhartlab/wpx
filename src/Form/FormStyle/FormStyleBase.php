@@ -2,6 +2,7 @@
 
 namespace Wpx\Form\FormStyle;
 
+use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Model\FieldInterface;
 use Wpx\Form\Model\FormInterface;
@@ -24,8 +25,15 @@ abstract class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function renderControlTemplate( ControlInterface $control, string $inner_html ): string {
+		$control->getElement()->setContent( $inner_html );
+		return $this->renderElementTemplate( $control->getElement() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function renderFieldWrapperTemplate( FieldInterface $field, string $field_html, array $descriptors = [] ): string {
-		dump($descriptors);
 		return "
 		<div class='field-wrapper field-type--{$field->getType()} field-id--{$field->getId()}'>
 			{$descriptors['before_field']}
@@ -39,50 +47,28 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 */
 	public function renderFieldTemplate( FieldInterface $field ): string {
 		$element = $field->getElement();
-		// Tags that need closing should have content.
-		if ( $element->getContent() ) {
-			return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
+
+		if ( $element->isVoidElement() ) {
+			return "<{$element->getTag()} {$element->getAttributes()->render()}>";
 		}
 
-		return "<{$element->getTag()} {$element->getAttributes()->render()}>";
+		return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function renderFieldLabelTemplate( FieldInterface $field, ElementInterface $element ): string {
-		return $this->renderElement( $element );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function renderFieldDescriptionTemplate( FieldInterface $field, ElementInterface $element ): string {
-		return $this->renderElement( $element );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function renderFieldHelpTextTemplate( FieldInterface $field, ElementInterface $element ): string {
-		return $this->renderElement( $element );
-	}
-
-
-	/**
-	 * @inheritDoc
-	 */
-	public function renderElement( ElementInterface $element ): string {
-		if ( $element->isEmpty() ) {
+	public function renderElementTemplate( ElementInterface $element ): string {
+		// If this is a tag that expects content but is empty, render nothing.
+		if ( $element->isEmpty() && !$element->isVoidElement() ) {
 			return '';
 		}
 
-		// Tags that need closing should have content.
-		if ( $element->getContent() ) {
-			return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
+		if ( $element->isVoidElement() ) {
+			return "<{$element->getTag()} {$element->getAttributes()->render()}>";
 		}
 
-		return "<{$element->getTag()} {$element->getAttributes()->render()}>";
+		return "<{$element->getTag()} {$element->getAttributes()->render()}>{$element->getContent()}</{$element->getTag()}>";
 	}
 
 }

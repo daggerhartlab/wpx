@@ -8,7 +8,7 @@ use Wpx\Form\Collection\SubmittedValues;
 use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 
-class FormBase extends ContainerBase implements FormInterface {
+class FormBase extends ControlBase implements FormInterface {
 
 	/**
 	 * @var Request
@@ -18,14 +18,14 @@ class FormBase extends ContainerBase implements FormInterface {
 	/**
 	 * @var string
 	 */
-	protected $method = '';
+	protected $defaultMethod = 'GET';
 
 	/**
 	 * Route for the form.
 	 *
 	 * @var string
 	 */
-	protected $action = '';
+	protected $defaultAction = '';
 
 	/**
 	 * @var FormStyleInterface
@@ -56,14 +56,13 @@ class FormBase extends ContainerBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getMethod(): string {
-		return $this->method;
+		return $this->getAttributes()->get('method', $this->defaultMethod);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setMethod( string $method ): FormInterface {
-		$this->method = $method;
 		$this->getElement()
 		     ->getAttributes()
 		     ->set('method', $method);
@@ -75,14 +74,13 @@ class FormBase extends ContainerBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getAction(): string {
-		return $this->action;
+		return $this->getAttributes()->get('action', $this->defaultAction);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setAction( string $action ): FormInterface {
-		$this->action = $action;
 		$this->getElement()
 		     ->getAttributes()
 		     ->set('action', $action);

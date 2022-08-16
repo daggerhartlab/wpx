@@ -4,7 +4,7 @@ namespace Wpx\Form\Event;
 
 use Wpx\Form\Model\FormInterface;
 
-class FormEvent implements EventInterface {
+class FormEvent extends ControlEvent {
 
 	/**
 	 * @var FormInterface
@@ -16,6 +16,7 @@ class FormEvent implements EventInterface {
 	 */
 	public function __construct( FormInterface $form ) {
 		$this->form = $form;
+		parent::__construct( $form );
 	}
 
 	/**

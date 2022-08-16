@@ -71,6 +71,7 @@ class Factory {
 			->setFormStyle( $form_style ?? $this->formStyles->get( static::DEFAULT_STYLE ) )
 			->setAttributes( $attributes ?? new Attributes( [] ) )
 			->setChildren( $fields_collection ?? new FieldsCollection( [] ) )
+			->setEventRegistry( new EventsRegistry() )
 			;
 	}
 

@@ -5,10 +5,12 @@ namespace Wpx\Form\Model;
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\ElementsCollection;
 use Wpx\Form\Collection\ElementsCollectionInterface;
+use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\FieldsCollectionInterface;
+use Wpx\Form\Service\EventsRegistry;
 use Wpx\Form\Service\EventsRegistryInterface;
 
-class ContainerBase implements ContainerInterface {
+class ControlBase implements ControlInterface {
 
 	/**
 	 * @var ElementInterface
@@ -47,7 +49,7 @@ class ContainerBase implements ContainerInterface {
 	/**
 	 * Parent container item.
 	 *
-	 * @var ContainerInterface
+	 * @var ControlInterface
 	 */
 	protected $parent;
 
@@ -94,14 +96,14 @@ class ContainerBase implements ContainerInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getParent(): ContainerInterface {
+	public function getParent(): ControlInterface {
 		return $this->parent;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setParent( ContainerInterface $parent ) {
+	public function setParent( ControlInterface $parent ) {
 		$this->parent = $parent;
 		return $this;
 	}
@@ -201,7 +203,10 @@ class ContainerBase implements ContainerInterface {
 	 * @inheritDoc
 	 */
 	public function setLabel( string $label ) {
-		$this->getLabel()->setContent( $label );
+		$this
+			->getLabel()
+			->setContent( $label );
+
 		return $this;
 	}
 
@@ -216,7 +221,10 @@ class ContainerBase implements ContainerInterface {
 	 * @inheritDoc
 	 */
 	public function setDescription( string $description ) {
-		$this->getDescription()->setContent( $description );
+		$this
+			->getDescription()
+			->setContent( $description );
+
 		return $this;
 	}
 
@@ -239,7 +247,10 @@ class ContainerBase implements ContainerInterface {
 	 * @inheritDoc
 	 */
 	public function getEventRegistry(): EventsRegistryInterface {
-		return $this->eventsRegistry;
+		return $this->eventsRegistry ??
+			$this
+				->setEventRegistry( new EventsRegistry() )
+				->getEventRegistry();
 	}
 
 	/**
@@ -269,12 +280,21 @@ class ContainerBase implements ContainerInterface {
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function hasChildren(): bool {
+		return !$this->getChildren()->isEmpty();
+	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getChildren(): FieldsCollectionInterface {
-		return $this->children;
+		return $this->children ??
+			$this
+				->setChildren( new FieldsCollection() )
+				->getChildren();
 	}
 
 	/**
@@ -291,7 +311,7 @@ class ContainerBase implements ContainerInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function addChild( ContainerInterface $child ) {
+	public function addChild( ControlInterface $child ) {
 		$child->setParent( $this );
 		$this->children->set( $child->getName(), $child );
 		return $this;
