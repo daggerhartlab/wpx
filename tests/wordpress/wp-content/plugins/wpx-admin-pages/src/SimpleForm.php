@@ -65,7 +65,10 @@ class SimpleForm extends AdminPageBase {
 				]),
 				new Simple(),
 				null,
-			);
+			)
+				->setDefaultValues([
+					'testing123' => 'This is my default value',
+				]);
 	}
 
 	public function submitSimpleForm() {

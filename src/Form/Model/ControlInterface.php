@@ -219,4 +219,31 @@ interface ControlInterface {
 	 * @return static
 	 */
 	public function addChild( ControlInterface $child );
+
+	/**
+	 * Get stored default values for control and children.
+	 *
+	 * @return array
+	 */
+	public function getDefaultValues(): array;
+
+	/**
+	 * Set default values for control and children.
+	 *
+	 * @param array $values
+	 *
+	 * @return static
+	 */
+	public function setDefaultValues( array $values );
+
+	/**
+	 * Apply the default values recursively to children.
+	 *
+	 * @param FieldsCollectionInterface $children
+	 * @param array $default_values
+	 *
+	 * @return static
+	 */
+	public function applyDefaultValues( FieldsCollectionInterface $children, array $default_values = [] );
+
 }

@@ -61,6 +61,11 @@ class ControlBase implements ControlInterface {
 	protected $children;
 
 	/**
+	 * @var array
+	 */
+	protected $defaultValues = [];
+
+	/**
 	 * Create a new container.
 	 *
 	 * @param ElementInterface $element
@@ -314,6 +319,46 @@ class ControlBase implements ControlInterface {
 	public function addChild( ControlInterface $child ) {
 		$child->setParent( $this );
 		$this->children->set( $child->getName(), $child );
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getDefaultValues(): array {
+		return $this->defaultValues;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setDefaultValues( array $values ) {
+		$this->defaultValues = $values;
+		if ( $this->hasChildren() ) {
+			$this->applyDefaultValues( $this->getChildren(), $values );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function applyDefaultValues( FieldsCollectionInterface $children, array $default_values = [] ) {
+		foreach ($children as $child) {
+			if ( !array_key_exists( $child->getName(), $default_values ) ) {
+				continue;
+			}
+
+			$child_value = $default_values[ $child->getName() ];
+			if ( $child instanceof FieldInterface ) {
+				$child->setValue( $child_value );
+			}
+
+			if ( $child->hasChildren() && is_array( $child_value ) ) {
+				$this->applyDefaultValues( $child->getChildren(), $child_value);
+			}
+		}
 		return $this;
 	}
 
