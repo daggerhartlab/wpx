@@ -10,6 +10,22 @@ use Wpx\Form\Service\EventsRegistryInterface;
 interface ControlInterface {
 
 	/**
+	 * Field machine name.
+	 *
+	 * @return string
+	 */
+	public function getName(): string;
+
+	/**
+	 * Set the field name.
+	 *
+	 * @param string $name
+	 *
+	 * @return static
+	 */
+	public function setName( string $name );
+
+	/**
 	 * Field HTML Element, if relevant.
 	 *
 	 * @return ElementInterface
@@ -26,48 +42,66 @@ interface ControlInterface {
 	public function setElement( ElementInterface $element );
 
 	/**
+	 * Get the element html tag.
+	 *
 	 * @return string
 	 */
-	public function getId(): string;
+	public function getElementTag(): string;
+
+	/**
+	 * Set the element html tag.
+	 *
+	 * @param string $tag
+	 *
+	 * @return static
+	 */
+	public function setElementTag( string $tag );
+
+	/**
+	 * Collection of other container element attributes.
+	 *
+	 * @return Attributes
+	 */
+	public function getElementAttributes(): Attributes;
+
+	/**
+	 * @param Attributes $attributes
+	 *
+	 * @return static
+	 */
+	public function setElementAttributes( Attributes $attributes );
+
+	/**
+	 * Get an element attribute value.
+	 *
+	 * @param string $name
+	 * @param string|int|float|null $default
+	 *
+	 * @return string|int|float|null
+	 */
+	public function getElementAttribute( string $name, $default = null );
+
+	/**
+	 * Set an element attribute value.
+	 *
+	 * @param string $name
+	 * @param string|int|float|null $value
+	 *
+	 * @return static
+	 */
+	public function setElementAttribute( string $name, $value = null );
+
+	/**
+	 * @return string
+	 */
+	public function getElementId(): string;
 
 	/**
 	 * @param string $id
 	 *
 	 * @return static
 	 */
-	public function setId(string $id);
-
-	/**
-	 * Field type.
-	 *
-	 * @return string
-	 */
-	public function getType(): string;
-
-	/**
-	 * Set the field type.
-	 *
-	 * @param string $type
-	 *
-	 * @return static
-	 */
-	public function setType( string $type );
-
-	/**
-	 * Field machine name.
-	 *
-	 * @return string
-	 */
-	public function getName(): string;
-
-	/**
-	 * Set the field name.
-	 *
-	 * @param string $name
-	 *
-	 * @return static
-	 */
-	public function setName( string $name );
+	public function setElementId(string $id);
 
 	/**
 	 * Get descriptors collection.
@@ -109,7 +143,7 @@ interface ControlInterface {
 	 *
 	 * @return ElementInterface
 	 */
-	public function getLabel(): ElementInterface;
+	public function getLabelElement(): ElementInterface;
 
 	/**
 	 * Set the field label.
@@ -125,7 +159,7 @@ interface ControlInterface {
 	 *
 	 * @return ElementInterface
 	 */
-	public function getDescription(): ElementInterface;
+	public function getDescriptionElement(): ElementInterface;
 
 	/**
 	 * Set field description text.
@@ -141,7 +175,7 @@ interface ControlInterface {
 	 *
 	 * @return ElementInterface
 	 */
-	public function getHelpText(): ElementInterface;
+	public function getHelpTextElement(): ElementInterface;
 
 	/**
 	 * Set help text.
@@ -163,20 +197,6 @@ interface ControlInterface {
 	 * @return static
 	 */
 	public function setEventRegistry( EventsRegistryInterface $events_registry );
-
-	/**
-	 * Collection of other container element attributes.
-	 *
-	 * @return Attributes
-	 */
-	public function getAttributes(): Attributes;
-
-	/**
-	 * @param Attributes $attributes
-	 *
-	 * @return static
-	 */
-	public function setAttributes( Attributes $attributes );
 
 	/**
 	 * @return ControlInterface

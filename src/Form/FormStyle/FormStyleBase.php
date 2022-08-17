@@ -33,7 +33,7 @@ abstract class FormStyleBase implements FormStyleInterface {
 	 */
 	public function renderFieldWrapperTemplate( FieldInterface $field, string $field_html, array $descriptors = [] ): string {
 		return "
-		<div class='field-wrapper field-type--{$field->getType()} field-id--{$field->getId()}'>
+		<div class='field-wrapper field-type--{$field->getElementTag()} field-id--{$field->getElementId()}'>
 			{$descriptors['before_field']}
 			{$field_html}
 			{$descriptors['after_field']}

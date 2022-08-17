@@ -152,12 +152,12 @@ class Renderer implements RendererInterface {
 	public function onPreRenderForm( FormEvent $event ): void {
 		$form = $event->getForm();
 		$form->getElement()->setTag( 'form' );
-		$form->getAttributes()
-		     ->set( 'id', $form->getId() )
+		$form->getElementAttributes()
+		     ->set( 'id', $form->getElementId() )
 		     ->set( 'method', $form->getMethod() )
 		     ->set( 'action', $form->getAction() );
 
-		$form->setAttributes( new Attributes( $form->getAttributes()->filter()->all() ) );
+		$form->setElementAttributes( new Attributes( $form->getElementAttributes()->filter()->all() ) );
 	}
 
 	/**
@@ -165,10 +165,10 @@ class Renderer implements RendererInterface {
 	 */
 	public function onPreRenderControl( ControlEvent $event ): void {
 		$control = $event->getControl();
-		$control->getAttributes()
-			->set( 'id', $control->getId() );
+		$control->getElementAttributes()
+			->set( 'id', $control->getElementId() );
 
-		$control->setAttributes( new Attributes( $control->getAttributes()->filter()->all() ) );
+		$control->setElementAttributes( new Attributes( $control->getElementAttributes()->filter()->all() ) );
 	}
 
 	/**
@@ -178,24 +178,24 @@ class Renderer implements RendererInterface {
 		$field = $event->getField();
 		$form = $field->getParent();
 		$field->getElement()->getAttributes()
-		      ->set( 'id', $field->getId() )
-		      ->set( 'name', $form->getId() . '[' . $field->getName() . ']' )
+		      ->set( 'id', $field->getElementId() )
+		      ->set( 'name', $form->getElementId() . '[' . $field->getName() . ']' )
 		      ->set( 'value', $field->getValue() ?? '' );
 
 		$field->getElement()->setAttributes( new Attributes( $field->getElement()->getAttributes()->filter()->all() ) );
 
 		// Prepare the descriptors.
 		$field
-			->getLabel()
+			->getLabelElement()
 		    ->setTag( 'label' )
 		    ->getAttributes()
-		    ->set( 'for', $form->getId() );
+		    ->set( 'for', $form->getElementId() );
 		$field
-			->getDescription()
+			->getDescriptionElement()
 			->setTag('div')
 			->setAttribute('class', ['description']);
 		$field
-			->getHelpText()
+			->getHelpTextElement()
 			->setTag('div')
 			->setAttribute('class', ['help']);
 

@@ -9,7 +9,14 @@ class Textarea extends FieldBase {
 	/**
 	 * @inheritDoc
 	 */
-	public static function getDefaultElementTag(): string {
+	public static function id(): string {
+		return 'field_textarea';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function defaultElementTag(): string {
 		return 'textarea';
 	}
 

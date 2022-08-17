@@ -20,7 +20,7 @@ abstract class FieldBase extends ControlBase implements FieldInterface {
 	 * @param string $label
 	 */
 	public function __construct( ElementInterface $element, string $name = '', string $label = '' ) {
-		$element->setTag( $this->getDefaultElementTag() );
+		$element->setTag( static::defaultElementTag() );
 
 		parent::__construct( $element, $name, $label );
 	}

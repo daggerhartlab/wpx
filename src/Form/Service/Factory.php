@@ -8,6 +8,7 @@ use Wpx\Form\Collection\FieldsCollection;
 use Wpx\Form\Collection\FormStylesCollection;
 use Wpx\Form\Collection\FormStylesCollectionInterface;
 use Wpx\Form\Model\Element;
+use Wpx\Form\Model\FieldInterface;
 use Wpx\Form\Model\FormBase;
 use Wpx\Form\Model\FormInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
@@ -63,16 +64,20 @@ class Factory {
 		Request $request = null
 	): FormInterface
 	{
-		return ( new FormBase( new Element() ) )
-			->setId( $id )
+		return ( new FormBase( new Element(), $id ) )
+			->setElementId( $id )
 			->setAction( $action )
 			->setMethod( $method )
 			->setRequest( $request ?? $this->request )
 			->setFormStyle( $form_style ?? $this->formStyles->get( static::DEFAULT_STYLE ) )
-			->setAttributes( $attributes ?? new Attributes( [] ) )
+			->setElementAttributes( $attributes ?? new Attributes( [] ) )
 			->setChildren( $fields_collection ?? new FieldsCollection( [] ) )
 			->setEventRegistry( new EventsRegistry() )
 			;
+	}
+
+	public function createField(): FieldInterface {
+
 	}
 
 }

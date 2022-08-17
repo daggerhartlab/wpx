@@ -2,7 +2,6 @@
 
 namespace Wpx\Form\Model\Field;
 
-use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Model\FieldBase;
 
 class Input extends FieldBase {
@@ -64,18 +63,15 @@ class Input extends FieldBase {
 	/**
 	 * @inheritDoc
 	 */
-	public static function getDefaultElementTag(): string {
-		return 'input';
+	public static function id(): string {
+		return 'field_input';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setType( string $type ) {
-		$this->type = $type;
-		$this->getElement()->setAttribute( 'type', $type );
-
-		return $this;
+	public static function defaultElementTag(): string {
+		return 'input';
 	}
 
 }

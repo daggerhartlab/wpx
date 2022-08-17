@@ -5,9 +5,22 @@ namespace Wpx\Form\Model;
 interface FieldInterface extends ControlInterface {
 
 	/**
+	 * Get the field type unique id.
+	 *
+	 * @internal
+	 *
 	 * @return string
 	 */
-	public static function getDefaultElementTag(): string;
+	public static function id(): string;
+
+	/**
+	 * Get the field type's default html element tag.
+	 *
+	 * @internal
+	 *
+	 * @return string
+	 */
+	public static function defaultElementTag(): string;
 
 	/**
 	 * Field value.

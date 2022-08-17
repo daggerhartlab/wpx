@@ -13,24 +13,14 @@ use Wpx\Form\Service\EventsRegistryInterface;
 class ControlBase implements ControlInterface {
 
 	/**
-	 * @var ElementInterface
-	 */
-	protected $element;
-
-	/**
-	 * @var string
-	 */
-	protected $type = '';
-
-	/**
 	 * @var string
 	 */
 	protected $name = '';
 
 	/**
-	 * @var string
+	 * @var ElementInterface
 	 */
-	protected $id;
+	protected $element;
 
 	/**
 	 * Additional content around a field. Ex: label, description, help text, etc.
@@ -75,12 +65,27 @@ class ControlBase implements ControlInterface {
 	 * @param string $label
 	 *   Container label.
 	 */
-	public function __construct( ElementInterface $element, string $name = '', string $label = '' ) {
+	public function __construct( ElementInterface $element, string $name, string $label = '' ) {
 		$this
 			->setElement( $element )
 			->setDescriptors( new ElementsCollection() )
 			->setName( $name )
 			->setLabel( $label );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getName(): string {
+		return $this->name;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setName( string $name ) {
+		$this->name = $name;
+		return $this;
 	}
 
 	/**
@@ -101,6 +106,76 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function getElementTag(): string {
+		return $this->getElement()->getTag();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setElementTag( string $tag ) {
+		$this->getElement()->setTag( $tag );
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getElementAttributes(): Attributes {
+		return $this
+			->getElement()
+			->getAttributes();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setElementAttributes( Attributes $attributes ) {
+		$this->getElement()
+		     ->setAttributes($attributes);
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getElementAttribute( string $name, $default = null ) {
+		return $this->getElement()->getAttributes()->get( $name, $default );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setElementAttribute( string $name, $value = null ) {
+		$this->getElement()->getAttributes()->set( $name, $value );
+		return $this;
+	}
+
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getElementId(): string {
+		// If there is no ID, make one.
+		return $this->getElementAttribute( 'id' ) ??
+		       $this
+			       ->setElementId( $this->makeId() )
+			       ->getElementId();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setElementId(string $id) {
+		$this->setElementAttribute( 'id', $id );
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function getParent(): ControlInterface {
 		return $this->parent;
 	}
@@ -110,56 +185,6 @@ class ControlBase implements ControlInterface {
 	 */
 	public function setParent( ControlInterface $parent ) {
 		$this->parent = $parent;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getId(): string {
-		return $this->id ??
-			$this->id = $this->makeId();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setId(string $id) {
-		$this->id = $id;
-		$this->getElement()
-		     ->getAttributes()
-		     ->set('id', $id);
-
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getType(): string {
-		return $this->type;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setType( string $type ) {
-		$this->type = $type;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getName(): string {
-		return $this->name;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setName( string $name ) {
-		$this->name = $name;
 		return $this;
 	}
 
@@ -200,7 +225,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getLabel(): ElementInterface {
+	public function getLabelElement(): ElementInterface {
 		return $this->getDescriptor('label');
 	}
 
@@ -209,7 +234,7 @@ class ControlBase implements ControlInterface {
 	 */
 	public function setLabel( string $label ) {
 		$this
-			->getLabel()
+			->getLabelElement()
 			->setContent( $label );
 
 		return $this;
@@ -218,7 +243,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getDescription(): ElementInterface {
+	public function getDescriptionElement(): ElementInterface {
 		return $this->getDescriptor('description');
 	}
 
@@ -227,7 +252,7 @@ class ControlBase implements ControlInterface {
 	 */
 	public function setDescription( string $description ) {
 		$this
-			->getDescription()
+			->getDescriptionElement()
 			->setContent( $description );
 
 		return $this;
@@ -236,7 +261,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getHelpText(): ElementInterface {
+	public function getHelpTextElement(): ElementInterface {
 		return $this->getDescriptor('help');
 	}
 
@@ -244,7 +269,7 @@ class ControlBase implements ControlInterface {
 	 * @inheritDoc
 	 */
 	public function setHelpText( string $help ) {
-		$this->getHelpText()->setContent( $help );
+		$this->getHelpTextElement()->setContent( $help );
 		return $this;
 	}
 
@@ -263,25 +288,6 @@ class ControlBase implements ControlInterface {
 	 */
 	public function setEventRegistry( EventsRegistryInterface $events_registry ) {
 		$this->eventsRegistry = $events_registry;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getAttributes(): Attributes {
-		return $this
-			->getElement()
-			->getAttributes();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setAttributes( Attributes $attributes ) {
-		$this->getElement()
-		     ->setAttributes($attributes);
-
 		return $this;
 	}
 
@@ -370,7 +376,7 @@ class ControlBase implements ControlInterface {
 	protected function makeId(): string {
 		// @todo - remove WP specific sanitize_title.
 		return implode( '--', array_map('sanitize_title', [
-			$this->getParent()->getId(),
+			$this->getParent()->getElementId(),
 			$this->getName(),
 		] ) );
 	}
