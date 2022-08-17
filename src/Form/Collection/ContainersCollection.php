@@ -4,7 +4,7 @@ namespace Wpx\Form\Collection;
 
 use Wpx\Form\Model\FieldInterface;
 
-class FieldsCollection extends SortableTypedMap implements FieldsCollectionInterface {
+class ContainersCollection extends SortableTypedMap implements ContainersCollectionInterface {
 
 	/**
 	 * @return string

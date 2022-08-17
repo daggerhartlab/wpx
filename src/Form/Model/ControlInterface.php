@@ -4,7 +4,7 @@ namespace Wpx\Form\Model;
 
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\ElementsCollectionInterface;
-use Wpx\Form\Collection\FieldsCollectionInterface;
+use Wpx\Form\Collection\ContainersCollectionInterface;
 use Wpx\Form\Service\EventsRegistryInterface;
 
 interface ControlInterface {
@@ -218,18 +218,18 @@ interface ControlInterface {
 	/**
 	 * Get all fields on the form.
 	 *
-	 * @return FieldsCollectionInterface
+	 * @return ContainersCollectionInterface
 	 */
-	public function getChildren(): FieldsCollectionInterface;
+	public function getChildren(): ContainersCollectionInterface;
 
 	/**
 	 * Set the entire fields map.
 	 *
-	 * @param FieldsCollectionInterface $children
+	 * @param ContainersCollectionInterface $children
 	 *
 	 * @return static
 	 */
-	public function setChildren( FieldsCollectionInterface $children );
+	public function setChildren( ContainersCollectionInterface $children );
 
 	/**
 	 * Add a field instance to the form.
@@ -259,11 +259,11 @@ interface ControlInterface {
 	/**
 	 * Apply the default values recursively to children.
 	 *
-	 * @param FieldsCollectionInterface $children
+	 * @param ContainersCollectionInterface $children
 	 * @param array $default_values
 	 *
 	 * @return static
 	 */
-	public function applyDefaultValues( FieldsCollectionInterface $children, array $default_values = [] );
+	public function applyDefaultValues( ContainersCollectionInterface $children, array $default_values = [] );
 
 }

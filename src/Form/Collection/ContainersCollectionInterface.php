@@ -2,4 +2,4 @@
 
 namespace Wpx\Form\Collection;
 
-interface FieldsCollectionInterface extends SortableTypedMapInterface {}
+interface ContainersCollectionInterface extends SortableTypedMapInterface {}

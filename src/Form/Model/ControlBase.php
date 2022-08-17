@@ -5,8 +5,8 @@ namespace Wpx\Form\Model;
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\ElementsCollection;
 use Wpx\Form\Collection\ElementsCollectionInterface;
-use Wpx\Form\Collection\FieldsCollection;
-use Wpx\Form\Collection\FieldsCollectionInterface;
+use Wpx\Form\Collection\ContainersCollection;
+use Wpx\Form\Collection\ContainersCollectionInterface;
 use Wpx\Form\Service\EventsRegistry;
 use Wpx\Form\Service\EventsRegistryInterface;
 
@@ -46,7 +46,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * Child container items.
 	 *
-	 * @var FieldsCollectionInterface
+	 * @var ContainersCollectionInterface
 	 */
 	protected $children;
 
@@ -301,17 +301,17 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getChildren(): FieldsCollectionInterface {
+	public function getChildren(): ContainersCollectionInterface {
 		return $this->children ??
 			$this
-				->setChildren( new FieldsCollection() )
+				->setChildren( new ContainersCollection() )
 				->getChildren();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setChildren( FieldsCollectionInterface $children ) {
+	public function setChildren( ContainersCollectionInterface $children ) {
 		$this->children = $children->map( function( $field ) {
 			return $field->setParent( $this );
 		} );
@@ -350,7 +350,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function applyDefaultValues( FieldsCollectionInterface $children, array $default_values = [] ) {
+	public function applyDefaultValues( ContainersCollectionInterface $children, array $default_values = [] ) {
 		foreach ($children as $child) {
 			if ( !array_key_exists( $child->getName(), $default_values ) ) {
 				continue;

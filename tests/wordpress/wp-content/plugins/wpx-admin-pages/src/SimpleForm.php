@@ -3,7 +3,7 @@
 namespace WpxExampleAdminPages;
 
 use Wpx\Admin\AdminPageBase;
-use Wpx\Form\Collection\FieldsCollection;
+use Wpx\Form\Collection\ContainersCollection;
 use Wpx\Form\Model\Element;
 use Wpx\Form\Model\Field\Input;
 use Wpx\Form\Model\Field\Textarea;
@@ -58,7 +58,7 @@ class SimpleForm extends AdminPageBase {
 				'whatwhat',
 				$this->actionPath('simple-form'),
 				'POST',
-				new FieldsCollection([
+				new ContainersCollection([
 					(new Input(new Element('', ['type' => 'text']), 'testing123', 'Test Field')),
 					(new Input(new Element('', ['type' => 'checkbox']), 'my-checkbox', 'What about checkboxes?')),
 					(new Textarea(new Element(), 'my-textarea', 'Message')),
