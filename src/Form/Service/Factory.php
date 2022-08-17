@@ -4,7 +4,7 @@ namespace Wpx\Form\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 use Wpx\Form\Collection\Attributes;
-use Wpx\Form\Collection\ContainersCollection;
+use Wpx\Form\Collection\ControlsCollection;
 use Wpx\Form\Collection\FormStylesCollection;
 use Wpx\Form\Collection\FormStylesCollectionInterface;
 use Wpx\Form\Model\Element;
@@ -47,7 +47,7 @@ class Factory {
 	 * @param string $id
 	 * @param string $action
 	 * @param string $method
-	 * @param ContainersCollection|null $fields_collection
+	 * @param ControlsCollection|null $fields_collection
 	 * @param FormStyleInterface|null $form_style
 	 * @param Attributes|null $attributes
 	 * @param Request|null $request
@@ -58,7 +58,7 @@ class Factory {
 		string $id,
 		string $action = '',
 		string $method = 'GET',
-		ContainersCollection $fields_collection = null,
+		ControlsCollection $fields_collection = null,
 		FormStyleInterface $form_style = null,
 		Attributes $attributes = null,
 		Request $request = null
@@ -70,8 +70,7 @@ class Factory {
 			->setMethod( $method )
 			->setRequest( $request ?? $this->request )
 			->setFormStyle( $form_style ?? $this->formStyles->get( static::DEFAULT_STYLE ) )
-			->setElementAttributes( $attributes ?? new Attributes( [] ) )
-			->setChildren( $fields_collection ?? new ContainersCollection( [] ) )
+			->setChildren( $fields_collection ?? new ControlsCollection( [] ) )
 			->setEventRegistry( new EventsRegistry() )
 			;
 	}

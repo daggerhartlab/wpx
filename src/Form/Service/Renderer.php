@@ -4,6 +4,7 @@ namespace Wpx\Form\Service;
 
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Event\ControlEvent;
+use Wpx\Form\Event\EventInterface;
 use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Event\ElementEvent;
@@ -31,16 +32,16 @@ class Renderer implements RendererInterface {
 	 */
 	public function setEventsRegistry( EventsRegistryInterface $events_registry ): RendererInterface {
 		$render_events = [
-			RendererInterface::EVENT_PRE_RENDER_FORM => [
+			EventInterface::EVENT_PRE_RENDER_FORM    => [
 				[$this, 'onPreRenderForm'],
 			],
-			RendererInterface::EVENT_PRE_RENDER_FIELD => [
+			EventInterface::EVENT_PRE_RENDER_FIELD   => [
 				[$this, 'onPreRenderField'],
 			],
-			RendererInterface::EVENT_PRE_RENDER_CONTROL => [
+			EventInterface::EVENT_PRE_RENDER_CONTROL => [
 				[$this, 'onPreRenderControl'],
 			],
-			RendererInterface::EVENT_PRE_RENDER_ELEMENT => [
+			EventInterface::EVENT_PRE_RENDER_ELEMENT => [
 				[$this, 'onPreRenderElement'],
 			],
 		];
@@ -58,8 +59,8 @@ class Renderer implements RendererInterface {
 	 */
 	public function renderForm( FormInterface $form ): string {
 		$event = new FormEvent( $form );
-		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_FORM );
-		$form->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FORM );
+		$this->eventRegistry->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_FORM );
+		$form->getEventRegistry()->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_FORM );
 
 		return $this->renderControl( $form, $form );
 	}
@@ -69,8 +70,8 @@ class Renderer implements RendererInterface {
 	 */
 	public function renderControl( ControlInterface $control, FormInterface $form ): string {
 		$event = new ControlEvent( $control );
-		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_CONTROL );
-		$control->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_CONTROL );
+		$this->eventRegistry->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_CONTROL );
+		$control->getEventRegistry()->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_CONTROL );
 
 		$style = $form->getFormStyle();
 		$html = '';
@@ -81,7 +82,11 @@ class Renderer implements RendererInterface {
 		 */
 		foreach ($control->getChildren() as $child) {
 			// Render the field and descriptors to html.
-			$field_html = $this->renderField( $child, $form );
+			$field_html = '';
+			if ( $child instanceof FieldTypeInterface ) {
+				$field_html = $this->renderField( $child, $form );
+			}
+
 			$label = $this->renderElement( $child->getDescriptor('label'), $form );
 			$description = $this->renderElement( $child->getDescriptor('description'), $form );
 			$help = $this->renderElement( $child->getDescriptor('help'), $form );
@@ -109,7 +114,8 @@ class Renderer implements RendererInterface {
 			}
 
 			if ( $child instanceof FieldTypeInterface ) {
-				$html .= $style->renderFieldWrapperTemplate( $child, $field_html, [
+				$html .= $style->renderFieldWrapperTemplate( $child, [
+					'field_html' => $field_html,
 					'label' => $label,
 					'description' => $description,
 					'help' => $help,
@@ -119,7 +125,12 @@ class Renderer implements RendererInterface {
 				] );
 			}
 			elseif ( $child instanceof ControlInterface ) {
-				$html .= $style->renderControlTemplate( $child, $children_html );
+				if ( empty( $children_html ) ) {
+					$html .= $style->renderControlTemplate( $child, $children_html );
+					continue;
+				}
+
+				$html .= $children_html;
 			}
 		}
 
@@ -131,9 +142,9 @@ class Renderer implements RendererInterface {
 	 */
 	public function renderField( FieldTypeInterface $field, FormInterface $form ): string {
 		$event = new FieldEvent( $field );
-		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
-		$form->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
-		$field->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
+		$this->eventRegistry->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_FIELD );
+		$form->getEventRegistry()->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_FIELD );
+		$field->getEventRegistry()->dispatchEvent( $event, EventInterface::EVENT_PRE_RENDER_FIELD );
 
 		return $form->getFormStyle()->renderFieldTemplate( $field );
 	}
@@ -142,7 +153,7 @@ class Renderer implements RendererInterface {
 	 * @inheritDoc
 	 */
 	public function renderElement( ElementInterface $element, FormInterface $form ): string {
-		$this->eventRegistry->dispatchEvent( new ElementEvent( $element ), self::EVENT_PRE_RENDER_ELEMENT );
+		$this->eventRegistry->dispatchEvent( new ElementEvent( $element ), EventInterface::EVENT_PRE_RENDER_ELEMENT );
 		return $form->getFormStyle()->renderElementTemplate( $element );
 	}
 
@@ -180,7 +191,7 @@ class Renderer implements RendererInterface {
 
 		$field->getElement()->getAttributes()
 		      ->set( 'id', $field->getElementId() )
-		      ->set( 'name', $form->getElementId() . '[' . $field->getName() . ']' )
+		      ->set( 'name', $field->makeElementName() )
 		      ->set( 'value', $field->getValue() ?? '' );
 
 		$field->getElement()->setAttributes( new Attributes( $field->getElement()->getAttributes()->filter()->all() ) );
@@ -190,7 +201,7 @@ class Renderer implements RendererInterface {
 			->getLabelElement()
 		    ->setTag( 'label' )
 		    ->getAttributes()
-		    ->set( 'for', $form->getElementId() );
+		    ->set( 'for', $field->getElementId() );
 		$field
 			->getDescriptionElement()
 			->setTag('div')

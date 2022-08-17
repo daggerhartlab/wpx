@@ -31,12 +31,11 @@ abstract class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function renderFieldWrapperTemplate( FieldTypeInterface $field, string $field_html, array $descriptors = [] ): string {
+	public function renderFieldWrapperTemplate( FieldTypeInterface $field, array $context = [] ): string {
 		return "
 		<div class='field-wrapper field-type--{$field->getElementTag()} field-id--{$field->getElementId()}'>
-			{$descriptors['before_field']}
-			{$field_html}
-			{$descriptors['after_field']}
+			{$context['before_field']}
+			{$context['field_html']}{$context['after_field']}
 		</div>";
 	}
 

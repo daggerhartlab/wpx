@@ -34,13 +34,12 @@ interface FormStyleInterface {
 
 	/**
 	 * @param FieldTypeInterface $field
-	 * @param string $field_html
-	 * @param array $descriptors
-	 *   Known: label, description, help, before_field, after_field.
+	 * @param array $context
+	 *   Known: field_html, label, description, help, before_field, after_field.
 	 *
 	 * @return string
 	 */
-	public function renderFieldWrapperTemplate( FieldTypeInterface $field, string $field_html, array $descriptors ): string;
+	public function renderFieldWrapperTemplate( FieldTypeInterface $field, array $context ): string;
 
 	/**
 	 * Render the field object.

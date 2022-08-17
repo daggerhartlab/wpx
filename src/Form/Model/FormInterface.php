@@ -3,7 +3,7 @@
 namespace Wpx\Form\Model;
 
 use Symfony\Component\HttpFoundation\Request;
-use Wpx\Form\Collection\ContainersCollectionInterface;
+use Wpx\Form\Collection\ControlsCollectionInterface;
 use Wpx\Form\Collection\SubmittedValuesInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
 

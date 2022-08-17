@@ -5,8 +5,8 @@ namespace Wpx\Form\Model;
 use Wpx\Form\Collection\Attributes;
 use Wpx\Form\Collection\ElementsCollection;
 use Wpx\Form\Collection\ElementsCollectionInterface;
-use Wpx\Form\Collection\ContainersCollection;
-use Wpx\Form\Collection\ContainersCollectionInterface;
+use Wpx\Form\Collection\ControlsCollection;
+use Wpx\Form\Collection\ControlsCollectionInterface;
 use Wpx\Form\Service\EventsRegistry;
 use Wpx\Form\Service\EventsRegistryInterface;
 
@@ -51,7 +51,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * Child container items.
 	 *
-	 * @var ContainersCollectionInterface
+	 * @var ControlsCollectionInterface
 	 */
 	protected $children;
 
@@ -165,7 +165,7 @@ class ControlBase implements ControlInterface {
 		// If there is no ID, make one.
 		return $this->getElementAttribute( 'id' ) ??
 		       $this
-			       ->setElementId( $this->makeId() )
+			       ->setElementId( $this->makeElementId() )
 			       ->getElementId();
 	}
 
@@ -174,7 +174,6 @@ class ControlBase implements ControlInterface {
 	 */
 	public function setElementId(string $id) {
 		$this->setElementAttribute( 'id', $id );
-
 		return $this;
 	}
 
@@ -329,17 +328,17 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getChildren(): ContainersCollectionInterface {
+	public function getChildren(): ControlsCollectionInterface {
 		return $this->children ??
 			$this
-				->setChildren( new ContainersCollection() )
+				->setChildren( new ControlsCollection() )
 				->getChildren();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function setChildren( ContainersCollectionInterface $children ) {
+	public function setChildren( ControlsCollectionInterface $children ) {
 		$this->children = $children->map( function( $field ) {
 			return $field->setParent( $this );
 		} );
@@ -379,7 +378,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function applyDefaultValues( ContainersCollectionInterface $children, array $default_values = [] ) {
+	public function applyDefaultValues( ControlsCollectionInterface $children, array $default_values = [] ) {
 		foreach ($children as $child) {
 			if ( !array_key_exists( $child->getName(), $default_values ) ) {
 				continue;
@@ -402,14 +401,22 @@ class ControlBase implements ControlInterface {
 	 *
 	 * @return string
 	 */
-	protected function makeId(): string {
-		$parts = [];
-		if ( $this->getParent() ) {
-			$parts[] = $this->getParent()->getElementId();
+	public function makeElementId(): string {
+		if ( !$this->getParent() ) {
+			return $this->getName();
 		}
-		$parts[] = $this->getName();
 
-		// @todo - remove WP specific sanitize_title.
-		return implode( '--', array_map('sanitize_title', $parts ) );
+		return "{$this->getParent()->makeElementId()}__{$this->getName()}";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function makeElementName(): string {
+		if ( !$this->getParent() ) {
+			return $this->getName();
+		}
+
+		return "{$this->getParent()->makeElementName()}[{$this->getName()}]";
 	}
 }

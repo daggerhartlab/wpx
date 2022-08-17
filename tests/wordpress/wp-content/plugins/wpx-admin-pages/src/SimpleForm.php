@@ -3,7 +3,8 @@
 namespace WpxExampleAdminPages;
 
 use Wpx\Admin\AdminPageBase;
-use Wpx\Form\Collection\ContainersCollection;
+use Wpx\Form\Collection\ControlsCollection;
+use Wpx\Form\Model\ControlBase;
 use Wpx\Form\Model\Element;
 use Wpx\Form\Model\Field\Input;
 use Wpx\Form\Model\Field\Textarea;
@@ -39,6 +40,7 @@ class SimpleForm extends AdminPageBase {
 	 */
 	public function content() {
 		$form = $this->mkform();
+		//dump($form);
 		$renderer = new Renderer(new EventsRegistry());
 		$out = $renderer->renderForm($form);
 		echo $out;
@@ -48,7 +50,8 @@ class SimpleForm extends AdminPageBase {
 			str_replace("><", ">\n<", $out)
 		) ?></pre>
 		<?php
-		dump($form->getSubmittedValues()->all());
+		dump($form->getSubmittedValues());
+		dump($form->getSubmittedValues()->get('my-group.2nd-nested-group.sub-field1'));
 	}
 
 	public function mkform() {
@@ -56,28 +59,81 @@ class SimpleForm extends AdminPageBase {
 		return $builder
 			->createForm(
 				'whatwhat',
-				$this->actionPath('simple-form'),
+				$this->pagePath(),
+				//$this->actionPath('simple-form'),
 				'POST',
-				new ContainersCollection([
-					(new Input(new Element('', ['type' => 'text']), 'testing123', 'Test Field')),
-					(new Input(new Element('', ['type' => 'checkbox']), 'my-checkbox', 'What about checkboxes?')),
-					(new Textarea(new Element(), 'my-textarea', 'Message')),
-					(new Input(new Element('', ['type' => 'submit']), 'testing123'))->setValue('Save'),
+				new ControlsCollection([
+					(
+						new Input(new Element('', ['type' => 'text']), 'testing123', 'Test Field')
+					),
+
+					(
+						new Input(new Element('', ['type' => 'checkbox']), 'my-checkbox', 'What about checkboxes?')
+					),
+
+					(
+						new Textarea(new Element(), 'my-textarea', 'Message')
+					),
+
+					// 1st nested group.
+					(
+						new ControlBase(new Element(), 'my-group')
+					)->setChildren(
+						new ControlsCollection([
+							(
+								new Input(new Element(), 'sub-field1', 'Sub Field 1')
+							)->setElementAttribute('type', 'text'),
+							(
+								new Input(new Element(), 'sub-field2', 'Sub Field 2')
+							)->setElementAttribute('type', 'text'),
+
+							// 2nd nested group
+							(
+								new ControlBase(
+									(new Element())
+										->setTag('fieldset'),
+									'2nd-nested-group'
+								)
+							)->setChildren(
+								new ControlsCollection([
+									(
+									new Input(new Element(), 'sub-field1', 'Sub Field 1')
+									)->setElementAttribute('type', 'text'),
+									(
+									new Input(new Element(), 'sub-field2', 'Sub Field 2')
+									)->setElementAttribute('type', 'text')
+								])
+							),
+						])
+					),
+					(
+						new Input(new Element('', ['type' => 'submit']), 'submit')
+					)->setValue('Save'),
 				]),
 				new Simple(),
 				null,
 			)
 				->setDefaultValues([
 					'testing123' => 'This is my default value',
+					'my-group' => [
+						'2nd-nested-group' => [
+							'sub-field1' => 'Nested default value.'
+						]
+					],
 				]);
+
 	}
 
 	public function submitSimpleForm() {
+//		dump($_REQUEST);
 		$this->validateAction();
 		$form = $this->mkform();
+//		dump($_REQUEST);
+//		die;
 		ob_start();
-			dump($form->getSubmittedValues()->all());
-			dump($form->getRequest());
+			dump('form_submitted_values', $form->getSubmittedValues()->all());
+			dump('form_request', $form->getRequest());
+			dump('_REQUEST', $_REQUEST);
 		$ob = ob_get_clean();
 		return $this->result("submitted " . $ob);
 	}

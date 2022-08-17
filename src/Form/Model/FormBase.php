@@ -64,17 +64,14 @@ class FormBase extends ControlBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getMethod(): string {
-		return $this->getElementAttributes()->get('method', $this->defaultMethod);
+		return $this->getElementAttribute('method', $this->defaultMethod);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setMethod( string $method ): FormInterface {
-		$this->getElement()
-		     ->getAttributes()
-		     ->set('method', $method);
-
+		$this->setElementAttribute('method', $method);
 		return $this;
 	}
 
@@ -82,17 +79,14 @@ class FormBase extends ControlBase implements FormInterface {
 	 * @inheritDoc
 	 */
 	public function getAction(): string {
-		return $this->getElementAttributes()->get('action', $this->defaultAction);
+		return $this->getElementAttribute('action', $this->defaultAction);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function setAction( string $action ): FormInterface {
-		$this->getElement()
-		     ->getAttributes()
-		     ->set('action', $action);
-
+		$this->setElementAttribute('action', $action);
 		return $this;
 	}
 
@@ -139,6 +133,8 @@ class FormBase extends ControlBase implements FormInterface {
 				$values = $this->getRequest()->request->all()[ $this->getElementId() ] ?? [];
 				break;
 		}
+
+		dump($values);
 
 		$this->submittedValues = new SubmittedValues( $values );
 		return $this->submittedValues;
