@@ -199,9 +199,26 @@ interface ControlInterface {
 	public function setEventRegistry( EventsRegistryInterface $events_registry );
 
 	/**
+	 * @return bool
+	 */
+	public function isRoot(): bool;
+
+	/**
 	 * @return ControlInterface
 	 */
-	public function getParent(): ControlInterface;
+	public function getRoot(): ControlInterface;
+
+	/**
+	 * @param ControlInterface $control
+	 *
+	 * @return static
+	 */
+	public function setRoot( ControlInterface $control );
+
+	/**
+	 * @return ControlInterface|null
+	 */
+	public function getParent();
 
 	/**
 	 * @param ControlInterface $parent
@@ -234,7 +251,7 @@ interface ControlInterface {
 	/**
 	 * Add a field instance to the form.
 	 *
-	 * @param ControlInterface|FieldInterface $child
+	 * @param ControlInterface|FieldTypeInterface $child
 	 *
 	 * @return static
 	 */

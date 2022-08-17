@@ -9,7 +9,7 @@ use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Event\ElementEvent;
 use Wpx\Form\Event\FieldEvent;
 use Wpx\Form\Event\FormEvent;
-use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FieldTypeInterface;
 use Wpx\Form\Model\FormInterface;
 
 class Renderer implements RendererInterface {
@@ -108,7 +108,7 @@ class Renderer implements RendererInterface {
 				}
 			}
 
-			if ( $child instanceof FieldInterface ) {
+			if ( $child instanceof FieldTypeInterface ) {
 				$html .= $style->renderFieldWrapperTemplate( $child, $field_html, [
 					'label' => $label,
 					'description' => $description,
@@ -129,7 +129,7 @@ class Renderer implements RendererInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function renderField( FieldInterface $field, FormInterface $form ): string {
+	public function renderField( FieldTypeInterface $field, FormInterface $form ): string {
 		$event = new FieldEvent( $field );
 		$this->eventRegistry->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
 		$form->getEventRegistry()->dispatchEvent( $event, self::EVENT_PRE_RENDER_FIELD );
@@ -151,7 +151,7 @@ class Renderer implements RendererInterface {
 	 */
 	public function onPreRenderForm( FormEvent $event ): void {
 		$form = $event->getForm();
-		$form->getElement()->setTag( 'form' );
+		$form->setElementTag( 'form' );
 		$form->getElementAttributes()
 		     ->set( 'id', $form->getElementId() )
 		     ->set( 'method', $form->getMethod() )
@@ -176,7 +176,8 @@ class Renderer implements RendererInterface {
 	 */
 	public function onPreRenderField( FieldEvent $event ): void {
 		$field = $event->getField();
-		$form = $field->getParent();
+		$form = $field->getRoot();
+
 		$field->getElement()->getAttributes()
 		      ->set( 'id', $field->getElementId() )
 		      ->set( 'name', $form->getElementId() . '[' . $field->getName() . ']' )

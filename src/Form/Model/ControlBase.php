@@ -37,6 +37,11 @@ class ControlBase implements ControlInterface {
 	protected $eventsRegistry;
 
 	/**
+	 * @var ControlInterface
+	 */
+	protected $root;
+
+	/**
 	 * Parent container item.
 	 *
 	 * @var ControlInterface
@@ -176,7 +181,7 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getParent(): ControlInterface {
+	public function getParent() {
 		return $this->parent;
 	}
 
@@ -185,6 +190,7 @@ class ControlBase implements ControlInterface {
 	 */
 	public function setParent( ControlInterface $parent ) {
 		$this->parent = $parent;
+		$this->setRoot( $parent->getRoot() );
 		return $this;
 	}
 
@@ -294,6 +300,28 @@ class ControlBase implements ControlInterface {
 	/**
 	 * @inheritDoc
 	 */
+	public function isRoot(): bool {
+		return is_null( $this->getParent() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getRoot(): ControlInterface {
+		return $this->isRoot() ? $this : $this->root;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setRoot( ControlInterface $control ) {
+		$this->root = $control;
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function hasChildren(): bool {
 		return !$this->getChildren()->isEmpty();
 	}
@@ -324,6 +352,7 @@ class ControlBase implements ControlInterface {
 	 */
 	public function addChild( ControlInterface $child ) {
 		$child->setParent( $this );
+		$child->setRoot( $this->getRoot() );
 		$this->children->set( $child->getName(), $child );
 		return $this;
 	}
@@ -357,7 +386,7 @@ class ControlBase implements ControlInterface {
 			}
 
 			$child_value = $default_values[ $child->getName() ];
-			if ( $child instanceof FieldInterface ) {
+			if ( $child instanceof FieldTypeInterface ) {
 				$child->setValue( $child_value );
 			}
 
@@ -374,10 +403,13 @@ class ControlBase implements ControlInterface {
 	 * @return string
 	 */
 	protected function makeId(): string {
+		$parts = [];
+		if ( $this->getParent() ) {
+			$parts[] = $this->getParent()->getElementId();
+		}
+		$parts[] = $this->getName();
+
 		// @todo - remove WP specific sanitize_title.
-		return implode( '--', array_map('sanitize_title', [
-			$this->getParent()->getElementId(),
-			$this->getName(),
-		] ) );
+		return implode( '--', array_map('sanitize_title', $parts ) );
 	}
 }

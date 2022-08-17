@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Model;
 
-abstract class FieldBase extends ControlBase implements FieldInterface {
+abstract class FieldTypeBase extends ControlBase implements FieldTypeInterface {
 
 	/**
 	 * @var mixed
@@ -35,7 +35,7 @@ abstract class FieldBase extends ControlBase implements FieldInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function setValue( $value ): FieldInterface {
+	public function setValue( $value ): FieldTypeInterface {
 		$this->value = $value;
 		return $this;
 	}
@@ -50,7 +50,7 @@ abstract class FieldBase extends ControlBase implements FieldInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function setRequired( bool $required = true ): FieldInterface {
+	public function setRequired( bool $required = true ): FieldTypeInterface {
 		$this->required = $required;
 		return $this;
 	}

@@ -8,7 +8,7 @@ use Wpx\Form\Collection\ContainersCollection;
 use Wpx\Form\Collection\FormStylesCollection;
 use Wpx\Form\Collection\FormStylesCollectionInterface;
 use Wpx\Form\Model\Element;
-use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FieldTypeInterface;
 use Wpx\Form\Model\FormBase;
 use Wpx\Form\Model\FormInterface;
 use Wpx\Form\FormStyle\FormStyleInterface;
@@ -76,7 +76,7 @@ class Factory {
 			;
 	}
 
-	public function createField(): FieldInterface {
+	public function createField(): FieldTypeInterface {
 
 	}
 

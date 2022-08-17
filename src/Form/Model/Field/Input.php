@@ -2,9 +2,9 @@
 
 namespace Wpx\Form\Model\Field;
 
-use Wpx\Form\Model\FieldBase;
+use Wpx\Form\Model\FieldTypeBase;
 
-class Input extends FieldBase {
+class Input extends FieldTypeBase {
 
 	/*
 	 * Input types.

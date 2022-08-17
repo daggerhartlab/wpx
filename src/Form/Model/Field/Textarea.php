@@ -2,9 +2,9 @@
 
 namespace Wpx\Form\Model\Field;
 
-use Wpx\Form\Model\FieldBase;
+use Wpx\Form\Model\FieldTypeBase;
 
-class Textarea extends FieldBase {
+class Textarea extends FieldTypeBase {
 
 	/**
 	 * @inheritDoc

@@ -4,7 +4,7 @@ namespace Wpx\Form\FormStyle;
 
 use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
-use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FieldTypeInterface;
 use Wpx\Form\Model\FormInterface;
 
 /**
@@ -31,7 +31,7 @@ abstract class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function renderFieldWrapperTemplate( FieldInterface $field, string $field_html, array $descriptors = [] ): string {
+	public function renderFieldWrapperTemplate( FieldTypeInterface $field, string $field_html, array $descriptors = [] ): string {
 		return "
 		<div class='field-wrapper field-type--{$field->getElementTag()} field-id--{$field->getElementId()}'>
 			{$descriptors['before_field']}
@@ -43,7 +43,7 @@ abstract class FormStyleBase implements FormStyleInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function renderFieldTemplate( FieldInterface $field ): string {
+	public function renderFieldTemplate( FieldTypeInterface $field ): string {
 		$element = $field->getElement();
 
 		if ( $element->isVoidElement() ) {

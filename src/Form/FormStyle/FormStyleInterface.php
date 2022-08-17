@@ -4,7 +4,7 @@ namespace Wpx\Form\FormStyle;
 
 use Wpx\Form\Model\ControlInterface;
 use Wpx\Form\Model\ElementInterface;
-use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FieldTypeInterface;
 use Wpx\Form\Model\FormInterface;
 
 interface FormStyleInterface {
@@ -33,23 +33,23 @@ interface FormStyleInterface {
 	public function renderControlTemplate( ControlInterface $control, string $inner_html ): string;
 
 	/**
-	 * @param FieldInterface $field
+	 * @param FieldTypeInterface $field
 	 * @param string $field_html
 	 * @param array $descriptors
 	 *   Known: label, description, help, before_field, after_field.
 	 *
 	 * @return string
 	 */
-	public function renderFieldWrapperTemplate( FieldInterface $field, string $field_html, array $descriptors ): string;
+	public function renderFieldWrapperTemplate( FieldTypeInterface $field, string $field_html, array $descriptors ): string;
 
 	/**
 	 * Render the field object.
 	 *
-	 * @param FieldInterface $field
+	 * @param FieldTypeInterface $field
 	 *
 	 * @return string
 	 */
-	public function renderFieldTemplate( FieldInterface $field ): string;
+	public function renderFieldTemplate( FieldTypeInterface $field ): string;
 
 	/**
 	 * Render field description.

@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Model;
 
-interface FieldInterface extends ControlInterface {
+interface FieldTypeInterface extends ControlInterface {
 
 	/**
 	 * Get the field type unique id.
@@ -34,9 +34,9 @@ interface FieldInterface extends ControlInterface {
 	 *
 	 * @param mixed $value
 	 *
-	 * @return FieldInterface
+	 * @return FieldTypeInterface
 	 */
-	public function setValue( $value ): FieldInterface;
+	public function setValue( $value ): FieldTypeInterface;
 
 	/**
 	 * Whether the field is required.
@@ -50,8 +50,8 @@ interface FieldInterface extends ControlInterface {
 	 *
 	 * @param bool $required
 	 *
-	 * @return FieldInterface
+	 * @return FieldTypeInterface
 	 */
-	public function setRequired( bool $required = true ): FieldInterface;
+	public function setRequired( bool $required = true ): FieldTypeInterface;
 
 }

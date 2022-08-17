@@ -2,7 +2,7 @@
 
 namespace Wpx\Form\Collection;
 
-use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FieldTypeInterface;
 
 class ContainersCollection extends SortableTypedMap implements ContainersCollectionInterface {
 
@@ -10,7 +10,7 @@ class ContainersCollection extends SortableTypedMap implements ContainersCollect
 	 * @return string
 	 */
 	public static function interface(): string {
-		return FieldInterface::class;
+		return FieldTypeInterface::class;
 	}
 
 }

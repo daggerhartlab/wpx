@@ -8,7 +8,7 @@ use Wpx\Form\Model\ElementInterface;
 use Wpx\Form\Event\ElementEvent;
 use Wpx\Form\Event\FieldEvent;
 use Wpx\Form\Event\FormEvent;
-use Wpx\Form\Model\FieldInterface;
+use Wpx\Form\Model\FieldTypeInterface;
 use Wpx\Form\Model\FormInterface;
 
 interface RendererInterface {
@@ -45,12 +45,12 @@ interface RendererInterface {
 	public function renderControl( ControlInterface $control, FormInterface $form ): string;
 
 	/**
-	 * @param FieldInterface $field
+	 * @param FieldTypeInterface $field
 	 * @param FormInterface $form
 	 *
 	 * @return string
 	 */
-	public function renderField( FieldInterface $field, FormInterface $form ): string;
+	public function renderField( FieldTypeInterface $field, FormInterface $form ): string;
 
 	/**
 	 * Render all
