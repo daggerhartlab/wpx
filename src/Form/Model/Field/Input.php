@@ -35,7 +35,7 @@ class Input extends FieldTypeBase {
 	/*
 	 * All types for loops and validation.
 	 */
-	public const TYPES = [
+	protected $types = [
 		self::TYPE_BUTTON,
 		self::TYPE_CHECKBOX,
 		self::TYPE_COLOR,

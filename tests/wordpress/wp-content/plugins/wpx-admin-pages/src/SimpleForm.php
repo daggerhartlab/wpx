@@ -31,9 +31,23 @@ class SimpleForm extends AdminPageBase {
 
 	public function actions() {
 		return [
-			'simple-form' => [$this, 'submitSimpleForm'],
+//			'simple-form' => [$this, 'submitSimpleForm'],
 		];
 	}
+
+//	public function submitSimpleForm() {
+////		dump($_REQUEST);
+//		$this->validateAction();
+//		$form = $this->mkform();
+////		dump($_REQUEST);
+////		die;
+//		ob_start();
+//		dump('form_submitted_values', $form->getSubmittedValues()->all());
+//		dump('form_request', $form->getRequest());
+//		dump('_REQUEST', $_REQUEST);
+//		$ob = ob_get_clean();
+//		return $this->result("submitted " . $ob);
+//	}
 
 	/**
 	 * @inheritDoc
@@ -64,11 +78,11 @@ class SimpleForm extends AdminPageBase {
 				'POST',
 				new ControlsCollection([
 					(
-						new Input(new Element('', ['type' => 'text']), 'testing123', 'Test Field')
+						new Input(new Element('', ['type' => Input::TYPE_TEXT]), 'testing123', 'Test Field')
 					),
 
 					(
-						new Input(new Element('', ['type' => 'checkbox']), 'my-checkbox', 'What about checkboxes?')
+						new Input(new Element('', ['type' => Input::TYPE_CHECKBOX]), 'my-checkbox', 'What about checkboxes?')
 					),
 
 					(
@@ -81,11 +95,11 @@ class SimpleForm extends AdminPageBase {
 					)->setChildren(
 						new ControlsCollection([
 							(
-								new Input(new Element(), 'sub-field1', 'Sub Field 1')
-							)->setElementAttribute('type', 'text'),
+								new Input(new Element(), 'f-number', 'Number')
+							)->setElementAttribute('type', Input::TYPE_NUMBER),
 							(
 								new Input(new Element(), 'sub-field2', 'Sub Field 2')
-							)->setElementAttribute('type', 'text'),
+							)->setElementAttribute('type', Input::TYPE_TEXT),
 
 							// 2nd nested group
 							(
@@ -98,16 +112,16 @@ class SimpleForm extends AdminPageBase {
 								new ControlsCollection([
 									(
 									new Input(new Element(), 'sub-field1', 'Sub Field 1')
-									)->setElementAttribute('type', 'text'),
+									)->setElementAttribute('type', Input::TYPE_TEXT),
 									(
 									new Input(new Element(), 'sub-field2', 'Sub Field 2')
-									)->setElementAttribute('type', 'text')
+									)->setElementAttribute('type', Input::TYPE_TEXT)
 								])
 							),
 						])
 					),
 					(
-						new Input(new Element('', ['type' => 'submit']), 'submit')
+						new Input(new Element('', ['type' => Input::TYPE_SUBMIT]), 'submit')
 					)->setValue('Save'),
 				]),
 				new Simple(),
@@ -124,17 +138,4 @@ class SimpleForm extends AdminPageBase {
 
 	}
 
-	public function submitSimpleForm() {
-//		dump($_REQUEST);
-		$this->validateAction();
-		$form = $this->mkform();
-//		dump($_REQUEST);
-//		die;
-		ob_start();
-			dump('form_submitted_values', $form->getSubmittedValues()->all());
-			dump('form_request', $form->getRequest());
-			dump('_REQUEST', $_REQUEST);
-		$ob = ob_get_clean();
-		return $this->result("submitted " . $ob);
-	}
 }
