@@ -93,8 +93,11 @@ class ConfigFactory implements ConfigFactoryInterface {
 			$default_value = $value;
 		}
 
+		// Ensure all keys in the value exist on the default options so additional
+		// values can be added without registering them.
+		$value_keys = is_array($value) ? array_keys($value) : [];
 		$resolver = new OptionsResolver();
-		$resolver->setDefaults( $default_value );
+		$resolver->setDefaults( array_merge( array_flip( $value_keys ), $default_value) );
 
 		$data = $resolver->resolve( $value );
 		$this->cache[ $config_name ] = new ConfigOptions( $config_name, $data, $default_value, $autoload );
