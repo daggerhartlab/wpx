@@ -12,7 +12,7 @@ use Wpx\Config\ConfigOptions;
 class ConfigFactory implements ConfigFactoryInterface {
 
 	/**
-	 * @var ConfigInterface[]
+	 * @var ConfigInterface[][]
 	 */
 	private $cache = [];
 
@@ -45,9 +45,10 @@ class ConfigFactory implements ConfigFactoryInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function get( string $config_name, array $default_value = [] ) {
-		if ( isset( $this->cache[ $config_name ] ) ) {
-			return $this->cache[ $config_name ];
+	public function get( string $config_name, array $default_value = [], array $options = [] ) {
+		$hash = $this->makeHash( $options );
+		if ( isset( $this->cache[ $config_name ][ $hash ] ) ) {
+			return $this->cache[ $config_name ][ $hash ];
 		}
 
 		$default_value = $this->resolveConfigDefaultValue( $config_name, $default_value );
@@ -65,18 +66,24 @@ class ConfigFactory implements ConfigFactoryInterface {
 	 *   Name of the config value in the config's storage.
 	 * @param array $default_value
 	 *   Override the default values for the config item.
-	 * @param null|string|int|bool $autoload
-	 *   Truthy.
+	 * @param array $options
+	 *   Additional options when creating this config item.
+	 *   - autoload: null
+	 *   - acf_format: true
 	 *
 	 * @return ConfigInterface
 	 */
-	protected function create( string $config_name, array $default_value = [], $autoload = null ) {
+	protected function create( string $config_name, array $default_value = [], array $options = []) {
+		$options = array_replace([
+			'autoload' => null,
+			'acf_format' => true,
+		], $options);
 		$default_value = $this->resolveConfigDefaultValue( $config_name, $default_value );
 
 		// Get value from DB and allow for ACF values.
 		$value = \get_option( $config_name, $default_value );
 		if ( function_exists( 'get_field' ) && \get_option( "options_{$config_name}" ) !== false ) {
-			$value = \get_field( $config_name, 'option' ) ?: [];
+			$value = \get_field( $config_name, 'option', $options['acf_format'] ) ?: [];
 		}
 
 		// If the value is a numeric array, unset the default value so the
@@ -100,9 +107,20 @@ class ConfigFactory implements ConfigFactoryInterface {
 		$resolver->setDefaults( array_merge( array_flip( $value_keys ), $default_value) );
 
 		$data = $resolver->resolve( $value );
-		$this->cache[ $config_name ] = new ConfigOptions( $config_name, $data, $default_value, $autoload );
+		$hash = $this->makeHash( $options );
+		$this->cache[ $config_name ][ $hash ] = new ConfigOptions( $config_name, $data, $default_value, $options['autoload'] );
 
-		return $this->cache[ $config_name ];
+		return $this->cache[ $config_name ][ $hash ];
+	}
+
+	/**
+	 * @param array $options
+	 *
+	 * @return string
+	 */
+	protected function makeHash(array $options = []) {
+		ksort($options);
+		return base64_encode(\json_encode($options));
 	}
 
 }
