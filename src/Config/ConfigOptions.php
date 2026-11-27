@@ -56,7 +56,7 @@ class ConfigOptions implements ConfigInterface {
 	 * @param int|null $blog_id
 	 *   Blog Id.
 	 */
-	public function __construct( string $option_name, array $data = [], array $default_value = [], $autoload = null, int $blog_id = null ) {
+	public function __construct( string $option_name, array $data = [], array $default_value = [], $autoload = null, ?int $blog_id = null ) {
 		$this->optionName = $option_name;
 		$this->defaultValue = $default_value;
 		$this->autoload = $autoload;
