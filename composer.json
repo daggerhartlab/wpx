@@ -17,7 +17,7 @@
         "symfony/options-resolver": ">=3.4",
         "symfony/finder": ">=2.7",
         "symfony/yaml": ">=3.4",
-        "daggerhartlab/collections": "^2"
+        "dflydev/dot-access-data": "^3.0"
     },
     "autoload": {
         "classmap": [
